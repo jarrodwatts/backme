@@ -1,88 +1,100 @@
 import type { NextPage } from "next";
-import { useState } from "react";
-import { buttonVariants } from "@/components/button";
 import Link from "next/link";
-import WalletConnection from "@/components/demo/WalletConnection";
-import UserAuthentication from "@/components/demo/UserAuthentication";
-import DecentralizedStorage from "@/components/demo/DecentralizedStorage";
-import ContractInteraction from "@/components/demo/ContractInteraction";
-
-const tabs = [
-  { name: "Wallet Connection", component: <WalletConnection /> },
-  { name: "Contract Interaction", component: <ContractInteraction /> },
-  { name: "User Authentication", component: <UserAuthentication /> },
-  { name: "Decentralized Storage", component: <DecentralizedStorage /> },
-];
+import Image from "next/image";
+import { siteConfig } from "../config/site";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const Home: NextPage = () => {
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>(tabs[0]);
-
   return (
-    <div className="w-full mx-auto pr-8 pl-8 max-w-7xl relative pb-10 mt-32">
-      <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">
-        EVM Kit{" "}
-        <span
-          className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4
-        text-gray-400
-        "
-        >
-          powered by thirdweb
-        </span>
-      </h1>
-      <p className="text-xl text-muted-foreground">
-        A collection of tools for Ethereum Virtual Machine (EVM) development.
-      </p>
-      <div className="flex flex-row items-center gap-4 pt-6 pb-16 ">
-        <Link
-          className={buttonVariants({ variant: "default" })}
-          href="https://docs.evmkit.com"
-          target="_blank"
-        >
-          Get Started
-        </Link>
+    <>
+      <section className="space-y-6 pb-12 pt-16 md:pb-2 md:pt-16 lg:py-24 mb-2">
+        <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl z-10">
+            A new way to support your favorite creators.
+          </h1>
 
-        <Link
-          className={buttonVariants({ variant: "secondary" })}
-          href="https://github.com/jarrodwatts/evmkit"
-          target="_blank"
-        >
-          GitHub
-        </Link>
-      </div>
-
-      <div className="flex flex-col  md:flex-row w-full">
-        <div className="flex flex-col items-start justify-start w-full md:w-96 pr-8">
-          <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors mt-2">
-            What&rsquo;s Included?
-          </h2>
-          <p className="leading-7 mt-2">
-            Explore the features of EVM Kit below.
+          <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 z-10">
+            Access exclusive content made by people you love and support them
+            directly; no middleman, no fees, no ads. On{" "}
+            <Link
+              className="font-semibold underline"
+              href="https://polygon.technology/"
+              target="_blank"
+            >
+              Polygon
+            </Link>
+            .
           </p>
-
-          <div className="mb-4 flex flex-col w-full flex-wrap items-start mt-4 flex-nowrap overflow-x-auto w-full md:w-60  ">
-            {tabs.map((tab) => (
-              <button
-                className={`w-full text-left pl-3 py-2 flex items-center pr-6 border-l-2 font-medium transition-colors duration-200 ${
-                  tab.name === activeTab.name
-                    ? "font-bold text-white lg:border-l-2 border-blue-500"
-                    : "text-gray-400 border-gray-700"
-                } hover:text-white`}
-                key={tab.name}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab.name}
-              </button>
-            ))}
+          <div className="space-x-4 mt-4 z-10">
+            <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
+              Get Started
+            </Link>
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+            >
+              GitHub
+            </Link>
           </div>
         </div>
-        <div
-          className="border border-gray-700 rounded-lg flex-1 p-8 m-l-3 mt-4 lg:mt-0
-          h-96 overflow-y-auto"
-        >
-          {activeTab.component}
+      </section>
+
+      <section
+        id="features"
+        className="container space-y-6 py-6 dark:bg-transparent md:py-12 lg:py-16"
+      >
+        <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
+          <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+            How it works
+          </h2>
+          <p className="max-w-[820px] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            Subscribe to your favorite creators using cryptocurrency, and
+            receive an NFT that grants you access to their exclusive content.
+            Come back at any time to view the content you've unlocked.
+          </p>
+          <div className="relative w-full py-8">
+            <div className="radial-gradient absolute blur-3xl rounded-full opacity-10 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 z-0 h-64 w-full md:top-32" />
+            <Image
+              src="/Fans.png"
+              width={1607}
+              height={557}
+              alt="how it works - backme"
+            />
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+      <section id="open-source" className="container py-8 md:py-12 lg:py-24">
+        <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
+          <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+            Why use it?
+          </h2>
+          <p className="max-w-[820px] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            Backme is built on the{" "}
+            <Link
+              className="font-semibold underline"
+              href="https://polygon.technology/"
+              target="_blank"
+            >
+              Polygon
+            </Link>{" "}
+            blockchain using{" "}
+            <Link
+              className="font-semibold underline"
+              href="https://www.lens.xyz/"
+              target="_blank"
+            >
+              Lens Protocol
+            </Link>
+            , meaning you verifiably own the content you upload on the
+            blockchain. This design enables you to earn money directly from your
+            fans without us taking a cut by using cryptocurrency.
+          </p>
+        </div>
+      </section>
+    </>
   );
 };
 
