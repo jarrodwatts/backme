@@ -30,11 +30,11 @@ export default function Post({
     <div className="flex flex-col w-full h-full border border-solid p-4 rounded-md mt-4">
       {/* Profile picture */}
 
-      <div className="flex flex-col ml-4 w-6/8">
+      <div className="flex flex-col ml-2 w-6/8">
         <div className="flex flex-row items-center gap-2">
           <MediaRenderer
             src={profilePicture}
-            alt={content}
+            alt={`${displayName}'s profile picture`}
             height="52px"
             width="52px"
             className="rounded-full"
@@ -57,15 +57,15 @@ export default function Post({
         {media && (
           <MediaRenderer
             src={media}
-            alt={content}
-            width="90%"
+            alt={`A post by ${displayName}`}
+            width="95%"
             height="auto"
-            className="m-4"
+            className="my-2 rounded-sm"
           />
         )}
 
         {/* Post metadata */}
-        <div className="flex flex-row items-center justify-between w-5/6 text-muted-foreground mt-3 ml-6">
+        <div className="flex flex-row items-center justify-between w-5/6 text-muted-foreground mt-3 ml-4">
           {/* Comments */}
           <div className="flex flex-row items-center gap-2">
             <Icons.comment />

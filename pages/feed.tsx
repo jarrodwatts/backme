@@ -30,8 +30,16 @@ const Feed: NextPage = () => {
     <>
       <Nav />
       <section className="w-full container flex max-w-[64rem] flex-col items-center gap-4 text-center h-screen">
-        <Tabs defaultValue="public" className="w-full md:w-[620px]">
+        <Tabs defaultValue="backme" className="w-full md:w-[620px]">
           <TabsList className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
+            <TabsTrigger
+              value="backme"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm "
+            >
+              <span className="bg-clip-text bg-gradient-to-r from-blue-600 to-pink-600">
+                Backme Exclusives
+              </span>
+            </TabsTrigger>
             <TabsTrigger
               value="public"
               className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
@@ -43,12 +51,6 @@ const Feed: NextPage = () => {
               className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
             >
               Your Feed
-            </TabsTrigger>
-            <TabsTrigger
-              value="backme"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-            >
-              Backme Exclusives
             </TabsTrigger>
           </TabsList>
 

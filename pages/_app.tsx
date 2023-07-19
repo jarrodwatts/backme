@@ -41,6 +41,8 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
           getProvider: async () =>
             new JsonRpcProvider("polygon.rpc.thirdweb.com"),
         },
+        // @ts-ignore: TODO
+        appId: "backme",
       }}
     >
       {children}
