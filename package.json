@@ -15,6 +15,7 @@
     "@lens-protocol/react-web": "^1.2.1",
     "@radix-ui/react-checkbox": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@thirdweb-dev/auth": "^3.0.21",
     "@thirdweb-dev/chains": "^0.1.15",
     "@thirdweb-dev/react": "^3.14.16",

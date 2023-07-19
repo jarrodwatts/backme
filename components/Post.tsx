@@ -1,0 +1,67 @@
+import { MediaRenderer } from "@thirdweb-dev/react";
+import React from "react";
+import { Icons } from "./icons";
+
+type Props = {
+  profilePicture: string;
+  displayName: string;
+  handle: string;
+  timePosted: string;
+  content: string;
+  comments: number;
+  mirrors: number;
+  hearts: number;
+};
+
+export default function Post({
+  comments,
+  content,
+  displayName,
+  handle,
+  hearts,
+  mirrors,
+  profilePicture,
+  timePosted,
+}: Props) {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full  border border-solid p-4 m-4 rounded-md">
+      {/* Profile information */}
+      <div className="flex flex-row items-center">
+        {/* Profile picture */}
+        <MediaRenderer src={profilePicture} alt={content} />
+
+        {/* Profile Name */}
+        <p className="leading-7 font-semibold">{displayName}</p>
+        {/* Handle */}
+        <p className="text-sm text-muted-foreground">{handle}</p>
+        {/* Time ago posted */}
+        {"Some time ago"}
+      </div>
+
+      {/* Post content */}
+      <div>
+        <p className="leading-7 [&:not(:first-child)]:mt-6">{content}</p>
+      </div>
+
+      {/* Post metadata */}
+      <div className="flex flex-row items-center justify-between w-full">
+        {/* Comments */}
+        <div className="flex flex-row items-center gap-2">
+          <Icons.comment />
+          <p className="text-sm text-muted-foreground">{comments}</p>
+        </div>
+
+        {/* Mirrors */}
+        <div className="flex flex-row items-center gap-2">
+          <Icons.mirror />
+          <p className="text-sm text-muted-foreground">{mirrors}</p>
+        </div>
+        {/* Hearts */}
+        <div className="flex flex-row items-center gap-2">
+          <Icons.heart />
+          <p className="text-sm text-muted-foreground">{hearts}</p>
+        </div>
+      </div>
+    </div>
+  );
+}

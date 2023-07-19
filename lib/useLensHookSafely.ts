@@ -1,5 +1,7 @@
 import { useSigner } from "@thirdweb-dev/react";
 
+type AsyncHookWithArgs<T, U> = ((args: U) => T) | ((args: U) => T);
+
 /**
  * Lens hooks need to be called within the LensProvider
  * But the LensProvider needs a signer, meaning the user needs a connected wallet.
@@ -7,7 +9,10 @@ import { useSigner } from "@thirdweb-dev/react";
  * @param hook The hook to wrap
  * @returns The result of the hook
  */
-export function useLensHookSafely<T>(hook: () => T): T | null {
+export function useLensHookSafely<T, U>(
+  hook: AsyncHookWithArgs<T, U>,
+  args?: U
+): T | null {
   const signer = useSigner();
 
   if (!signer) {
@@ -15,7 +20,7 @@ export function useLensHookSafely<T>(hook: () => T): T | null {
   }
 
   try {
-    return hook();
+    return hook(args ?? ({} as U));
   } catch (e) {
     console.error(e);
     return null;

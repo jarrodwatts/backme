@@ -22,6 +22,9 @@ import {
   Trash,
   Twitter,
   User,
+  Heart,
+  MessageCircle,
+  Repeat2,
   X,
 } from "lucide-react";
 
@@ -47,6 +50,9 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  heart: Heart,
+  comment: MessageCircle,
+  mirror: Repeat2,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
