@@ -19,6 +19,9 @@ export default function SignInWithLensButton({}: Props) {
         style={{
           width: "90%",
         }}
+        auth={{
+          loginOptional: true,
+        }}
         theme="dark"
       />
     );
@@ -38,5 +41,12 @@ export default function SignInWithLensButton({}: Props) {
     );
   }
 
-  return <ConnectWallet />;
+  return (
+    <ConnectWallet
+      theme="dark"
+      auth={{
+        loginOptional: true,
+      }}
+    />
+  );
 }
