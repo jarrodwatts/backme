@@ -12,7 +12,6 @@ import {
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { Skeleton } from "../components/ui/skeleton";
 import FeedContainer from "@/components/feed/FeedContainer";
-import PublicFeedContainer from "@/components/feed/PublicFeedContainer";
 import Post from "@/components/Post";
 
 const Feed: NextPage = () => {
@@ -28,8 +27,8 @@ const Feed: NextPage = () => {
   return (
     <>
       <Nav />
-      <section className="container flex max-w-[64rem] flex-col items-center gap-4 text-center h-screen">
-        <Tabs defaultValue="public" className="w-[620px]">
+      <section className="w-full container flex max-w-[64rem] flex-col items-center gap-4 text-center h-screen">
+        <Tabs defaultValue="public" className="w-full md:w-[620px]">
           <TabsList className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
             <TabsTrigger
               value="public"
@@ -77,6 +76,7 @@ const Feed: NextPage = () => {
                   handle={post.profile.handle}
                   hearts={post.stats.totalAmountOfCollects}
                   mirrors={post.stats.totalAmountOfMirrors}
+                  // @ts-ignore
                   profilePicture={post.profile.picture?.original?.url || ""}
                   timePosted={post.createdAt}
                   key={post.id}

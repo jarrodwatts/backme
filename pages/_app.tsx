@@ -73,7 +73,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           <LensThirdwebProvider>
             <Component {...pageProps} />
-            <SiteFooter className="border-t" />
           </LensThirdwebProvider>
         </ThirdwebProvider>
       </main>

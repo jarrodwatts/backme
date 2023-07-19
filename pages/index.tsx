@@ -5,6 +5,7 @@ import { siteConfig } from "../config/site";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Nav } from "@/components/Navbar";
+import { SiteFooter } from "@/components/Footer";
 
 const Home: NextPage = () => {
   return (
@@ -16,7 +17,7 @@ const Home: NextPage = () => {
             A new way to support your favorite creators.
           </h1>
 
-          <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 z-10">
+          <p className="w-full max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 z-10">
             Access exclusive content made by people you love and support them
             directly; no middleman, no fees, no ads. On{" "}
             <Link
@@ -96,6 +97,7 @@ const Home: NextPage = () => {
           </p>
         </div>
       </section>
+      <SiteFooter className="border-t" />
     </>
   );
 };
