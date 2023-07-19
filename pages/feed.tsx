@@ -8,6 +8,7 @@ import {
   useActiveWallet,
   useExplorePublications,
   Post as PostType,
+  PublicationSortCriteria,
 } from "@lens-protocol/react-web";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { Skeleton } from "../components/ui/skeleton";
@@ -20,6 +21,7 @@ const Feed: NextPage = () => {
   const publicFeed = useLensHookSafely(useExplorePublications, {
     limit: 25,
     publicationTypes: [PublicationTypes.Post],
+    sortCriteria: PublicationSortCriteria.TopCollected,
   });
 
   console.log(publicFeed);
@@ -72,6 +74,11 @@ const Feed: NextPage = () => {
                 <Post
                   comments={post.stats.commentsCount}
                   content={post.metadata.content || ""}
+                  media={
+                    post?.metadata?.image ||
+                    post?.metadata?.media?.[0]?.original?.url ||
+                    ""
+                  }
                   displayName={post.profile.name || post.profile.handle}
                   handle={post.profile.handle}
                   hearts={post.stats.totalAmountOfCollects}

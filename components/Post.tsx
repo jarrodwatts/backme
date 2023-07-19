@@ -9,6 +9,7 @@ type Props = {
   handle: string;
   timePosted: string;
   content: string;
+  media: string;
   comments: number;
   mirrors: number;
   hearts: number;
@@ -17,6 +18,7 @@ type Props = {
 export default function Post({
   comments,
   content,
+  media,
   displayName,
   handle,
   hearts,
@@ -25,33 +27,45 @@ export default function Post({
   timePosted,
 }: Props) {
   return (
-    <div className="flex flex-row w-full h-full border border-solid p-4 rounded-md mt-4">
+    <div className="flex flex-col w-full h-full border border-solid p-4 rounded-md mt-4">
       {/* Profile picture */}
-      <MediaRenderer
-        src={profilePicture}
-        alt={content}
-        height="40px"
-        width="40px"
-        className="rounded-3xl"
-      />
 
-      <div className="flex flex-col ml-4 w-5/6">
-        <div className="flex flex-col items-start">
-          {/* Profile Name */}
-          <p className="leading-7 font-semibold">{displayName}</p>
-          {/* Handle */}
-          <p className="text-sm text-muted-foreground">@{handle}</p>
-          {/* Time ago posted */}
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatDate(timePosted)} ago
-          </p>
+      <div className="flex flex-col ml-4 w-6/8">
+        <div className="flex flex-row items-center gap-2">
+          <MediaRenderer
+            src={profilePicture}
+            alt={content}
+            height="52px"
+            width="52px"
+            className="rounded-full"
+          />
+          <div className="flex flex-col items-start">
+            {/* Profile Name */}
+            <p className="font-semibold">{displayName}</p>
+            {/* Handle */}
+            <p className="text-sm text-muted-foreground">@{handle}</p>
+            {/* Time ago posted */}
+            <p className="text-xs text-muted-foreground mt-1">
+              {formatDate(timePosted)} ago
+            </p>
+          </div>
         </div>
 
         {/* Post content */}
         <p className="text-start mt-2 text-ellipsis break-words">{content}</p>
 
+        {media && (
+          <MediaRenderer
+            src={media}
+            alt={content}
+            width="90%"
+            height="auto"
+            className="m-4"
+          />
+        )}
+
         {/* Post metadata */}
-        <div className="flex flex-row items-center justify-between w-full text-muted-foreground mt-6 ">
+        <div className="flex flex-row items-center justify-between w-5/6 text-muted-foreground mt-3 ml-6">
           {/* Comments */}
           <div className="flex flex-row items-center gap-2">
             <Icons.comment />
