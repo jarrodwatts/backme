@@ -4,10 +4,12 @@ import Image from "next/image";
 import { siteConfig } from "../config/site";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Nav } from "@/components/Navbar";
 
 const Home: NextPage = () => {
   return (
     <>
+      <Nav />
       <section className="space-y-6 pb-12 pt-16 md:pb-2 md:pt-16 lg:py-24 mb-2">
         <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
           <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl z-10">
