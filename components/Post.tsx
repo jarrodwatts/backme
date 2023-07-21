@@ -153,19 +153,19 @@ export default function Post({
             </p>
 
             {media && (
-              <DialogTrigger>
+              <DialogTrigger className="pr-2">
                 <MediaRenderer
                   src={media}
                   alt={`A post by ${displayName}`}
-                  width="95%"
+                  width="100%"
                   height="auto"
-                  className="my-2 rounded-sm"
+                  className="my-2 rounded-sm "
                 />
               </DialogTrigger>
             )}
 
             {/* Post metadata */}
-            <div className="flex flex-row items-center justify-between w-full text-muted-foreground mt-4 pr-4">
+            <div className="flex flex-row items-center justify-between w-full text-muted-foreground mt-4 pr-5">
               {/* Comments - Take user to the post */}
               <Link
                 href={`/post/${id}`}
