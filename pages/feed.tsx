@@ -5,7 +5,6 @@ import { TabsList, Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import {
   PublicationTypes,
   useActiveProfile,
-  useActiveWallet,
   useExplorePublications,
   Post as PostType,
   PublicationSortCriteria,
@@ -16,7 +15,6 @@ import FeedContainer from "@/components/feed/FeedContainer";
 import Post from "@/components/Post";
 
 const Feed: NextPage = () => {
-  const walletInfo = useLensHookSafely(useActiveWallet);
   const activeProfile = useLensHookSafely(useActiveProfile);
   const publicFeed = useLensHookSafely(useExplorePublications, {
     limit: 25,
@@ -60,7 +58,7 @@ const Feed: NextPage = () => {
           >
             {/* Public feed loading */}
             {publicFeed?.loading &&
-              Array.from([..."LOLOLOLOLOLO".split("")]).map((_, i) => (
+              Array.from({ length: 10 }).map((_, i) => (
                 <Skeleton
                   className="h-[88px] animate-pulse bg-muted mt-3 w-full"
                   key={i}
@@ -74,6 +72,9 @@ const Feed: NextPage = () => {
               // @ts-ignore
               publicFeed?.data?.map((post: PostType) => (
                 <Post
+                  key={post.id}
+                  post={post}
+                  id={post.id}
                   comments={post.stats.commentsCount}
                   content={post.metadata.content || ""}
                   media={
@@ -83,12 +84,12 @@ const Feed: NextPage = () => {
                   }
                   displayName={post.profile.name || post.profile.handle}
                   handle={post.profile.handle}
-                  hearts={post.stats.totalAmountOfCollects}
+                  hearts={post.stats.totalUpvotes}
+                  collects={post.stats.totalAmountOfCollects}
                   mirrors={post.stats.totalAmountOfMirrors}
                   // @ts-ignore
                   profilePicture={post.profile.picture?.original?.url || ""}
                   timePosted={post.createdAt}
-                  key={post.id}
                 />
               ))}
           </TabsContent>
@@ -100,7 +101,7 @@ const Feed: NextPage = () => {
             {
               // Loading active profile
               activeProfile?.loading &&
-                Array.from(["LOLOLOLO"]).map((_, i) => (
+                Array.from({ length: 10 }).map((_, i) => (
                   <Skeleton
                     className="h-[88px] animate-pulse bg-muted mt-3 w-full"
                     key={i}
@@ -119,7 +120,7 @@ const Feed: NextPage = () => {
             {
               // Loading active profile
               activeProfile?.loading &&
-                Array.from(["LOLOLOLO"]).map((_, i) => (
+                Array.from({ length: 10 }).map((_, i) => (
                   <Skeleton
                     className="h-[88px] animate-pulse bg-muted mt-3 w-full"
                     key={i}

@@ -763,10 +763,10 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@lens-protocol/api-bindings@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.9.0.tgz#5f6eab5ba3ba5790f5a1bf633f78ac0a78543ed0"
-  integrity sha512-R+TRQDeKpJ9+He42H1ms1hUf3UaJ7VztTljawZjNqipoUGR30t5x2+D+2GJIKT+mobLEyjhFqGFriesLwn9whw==
+"@lens-protocol/api-bindings@0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.9.1.tgz#947b9f34173693fbd90a1bb3a15211868bae5e88"
+  integrity sha512-zVOTgLjfWKoC9A7SFzEj5IGxO0brs/XYQmbMQfFfOCchVgdyBFNvfiE2Gl1St4nipPtLcRyJlbZKpJ/y/2wOXw==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@lens-protocol/domain" "0.9.0"
@@ -795,14 +795,14 @@
     "@lens-protocol/shared-kernel" "0.9.0"
     tslib "^2.5.0"
 
-"@lens-protocol/gated-content@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/gated-content/-/gated-content-0.3.0.tgz#930f6d60e0b4d1c88e2e1c581b6a65b698d9ed6d"
-  integrity sha512-NZadS8nHcIS3CoV6cC1oSkcIjxplS0teH3+Rt13UAlfH1f9YN4208yhhbIjThbHQU0ns7mj9BEhvL4a+i9s2EA==
+"@lens-protocol/gated-content@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/gated-content/-/gated-content-0.3.1.tgz#82c8b6587c390db863fa2c44dffb111fde469638"
+  integrity sha512-EWjnrmm9pXfqOmH2pTAQ0mDUxPJZOn+kcWQTxZ12+ecPWhFhTlhM86XYM/toFDTs+VgNec9+KAkyyMxsqgyyxw==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
-    "@lens-protocol/api-bindings" "0.9.0"
+    "@lens-protocol/api-bindings" "0.9.1"
     "@lens-protocol/domain" "0.9.0"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
@@ -814,30 +814,30 @@
     siwe "^1.1.6"
     tslib "^2.5.0"
 
-"@lens-protocol/react-web@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react-web/-/react-web-1.2.1.tgz#db81a05742fb723bc7e67ddbebb7886ec4ef42c6"
-  integrity sha512-XsEqyBd+pwI5kMA8jEzNH2UN76I2ePbbe2H6HC6+Wcv28pr6lQ/fGvGoNEgBxC7213zRJb7CHIR5rKUuT1f35w==
+"@lens-protocol/react-web@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/react-web/-/react-web-1.2.2.tgz#d1e3f315442496a48bc2fac51fa7f5d2960cff34"
+  integrity sha512-BU8tShrRVMBoIaAtHstGSPu0zu0uGfaWFk34aauJKkw+PtEH9ljsnFurECVVZaq/HoHRREj/I7ByIqrFvHCgnA==
   dependencies:
-    "@lens-protocol/api-bindings" "0.9.0"
-    "@lens-protocol/gated-content" "0.3.0"
-    "@lens-protocol/react" "1.2.1"
+    "@lens-protocol/api-bindings" "0.9.1"
+    "@lens-protocol/gated-content" "0.3.1"
+    "@lens-protocol/react" "1.2.2"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
     tslib "^2.5.0"
 
-"@lens-protocol/react@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react/-/react-1.2.1.tgz#5c0d6ba5206ac56b0710c7b0f8fbf207b509f3e5"
-  integrity sha512-ArYLJO9A91CieQvUO9Doqf4fzO8FYiQ1yQsVG2QQq0DFxEUsSmOVzuPtyUY7hKqRB7BPDW4bYvW9Q2ZnEwoUBw==
+"@lens-protocol/react@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/react/-/react-1.2.2.tgz#10b9fb82470b9f9dfbe964f132c93149317cdac3"
+  integrity sha512-sGbUrlhAjizK2HSJIbpFw68FdHbodNKku0nz1S9T9zqn7dcdXJpx/wqWun9ZGe/13jtwXqhdPtipFFaGQ8qNyw==
   dependencies:
     "@apollo/client" "^3.7.1"
     "@ethersproject/abstract-signer" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
-    "@lens-protocol/api-bindings" "0.9.0"
+    "@lens-protocol/api-bindings" "0.9.1"
     "@lens-protocol/blockchain-bindings" "0.9.0"
     "@lens-protocol/domain" "0.9.0"
-    "@lens-protocol/gated-content" "0.3.0"
+    "@lens-protocol/gated-content" "0.3.1"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
     graphql "^16.6.0"

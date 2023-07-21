@@ -1,6 +1,6 @@
 import { useSigner } from "@thirdweb-dev/react";
 
-type AsyncHookWithArgs<T, U> = ((args: U) => T) | ((args: U) => T);
+type HookWithArgs<T, U> = (args: U) => T;
 
 /**
  * Lens hooks need to be called within the LensProvider
@@ -10,7 +10,7 @@ type AsyncHookWithArgs<T, U> = ((args: U) => T) | ((args: U) => T);
  * @returns The result of the hook
  */
 export function useLensHookSafely<T, U>(
-  hook: AsyncHookWithArgs<T, U>,
+  hook: HookWithArgs<T, U>,
   args?: U
 ): T | null {
   const signer = useSigner();

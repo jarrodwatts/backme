@@ -26,6 +26,7 @@ import {
   MessageCircle,
   Repeat2,
   X,
+  GalleryVerticalEnd,
 } from "lucide-react";
 
 export const Icons = {
@@ -53,6 +54,7 @@ export const Icons = {
   heart: Heart,
   comment: MessageCircle,
   mirror: Repeat2,
+  collect: GalleryVerticalEnd,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
