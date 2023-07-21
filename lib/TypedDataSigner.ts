@@ -19,8 +19,6 @@ export class TypedDataSignerWrapper extends Signer implements TypedDataSigner {
   }
 
   async getAddress(): Promise<string> {
-    console.log("Signer:", this.signer);
-    console.log("getAddress", this?.signer?.getAddress());
     return this.signer.getAddress();
   }
 

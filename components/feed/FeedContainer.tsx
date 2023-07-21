@@ -16,13 +16,5 @@ export default function FeedContainer({ profileId }: Props) {
     profileId: profileId,
   });
 
-  console.log("Feed items:", {
-    feedItems,
-    loading,
-    hasMore,
-    error,
-    next,
-  });
-
   return <div></div>;
 }

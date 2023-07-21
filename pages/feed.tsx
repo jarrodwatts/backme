@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-
 import { Nav } from "@/components/Navbar";
 import { TabsList, Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -9,6 +8,7 @@ import {
   Post as PostType,
   PublicationSortCriteria,
 } from "@lens-protocol/react-web";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { Skeleton } from "../components/ui/skeleton";
 import FeedContainer from "@/components/feed/FeedContainer";
@@ -17,12 +17,10 @@ import Post from "@/components/Post";
 const Feed: NextPage = () => {
   const activeProfile = useLensHookSafely(useActiveProfile);
   const publicFeed = useLensHookSafely(useExplorePublications, {
-    limit: 25,
+    limit: 10,
     publicationTypes: [PublicationTypes.Post],
     sortCriteria: PublicationSortCriteria.TopCollected,
   });
-
-  console.log(publicFeed);
 
   return (
     <>
@@ -66,32 +64,52 @@ const Feed: NextPage = () => {
               ))}
 
             {/* Public feed has loaded */}
-            {!publicFeed?.loading &&
-              publicFeed?.data &&
-              // Convert to PostType and map into Post components
-              // @ts-ignore
-              publicFeed?.data?.map((post: PostType) => (
-                <Post
-                  key={post.id}
-                  post={post}
-                  id={post.id}
-                  comments={post.stats.commentsCount}
-                  content={post.metadata.content || ""}
-                  media={
-                    post?.metadata?.image ||
-                    post?.metadata?.media?.[0]?.original?.url ||
-                    ""
-                  }
-                  displayName={post.profile.name || post.profile.handle}
-                  handle={post.profile.handle}
-                  hearts={post.stats.totalUpvotes}
-                  collects={post.stats.totalAmountOfCollects}
-                  mirrors={post.stats.totalAmountOfMirrors}
-                  // @ts-ignore
-                  profilePicture={post.profile.picture?.original?.url || ""}
-                  timePosted={post.createdAt}
-                />
-              ))}
+            {!publicFeed?.loading && publicFeed?.data && (
+              <InfiniteScroll
+                dataLength={publicFeed?.data?.length || 0}
+                next={() => publicFeed?.next()}
+                hasMore={publicFeed?.hasMore}
+                loader={
+                  <>
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <Skeleton
+                        className="h-[88px] animate-pulse bg-muted mt-3 w-full"
+                        key={i}
+                      />
+                    ))}
+                  </>
+                }
+                endMessage={
+                  <p className="text-muted-foreground text-sm my-4">
+                    You&rsquo;ve seen it all!
+                  </p>
+                }
+              >
+                {/* @ts-ignore: PostType idk bro */}
+                {publicFeed?.data?.map((post: PostType) => (
+                  <Post
+                    key={post.id}
+                    post={post}
+                    id={post.id}
+                    comments={post.stats.commentsCount}
+                    content={post.metadata.content || ""}
+                    media={
+                      post?.metadata?.image ||
+                      post?.metadata?.media?.[0]?.original?.url ||
+                      ""
+                    }
+                    displayName={post.profile.name || post.profile.handle}
+                    handle={post.profile.handle}
+                    hearts={post.stats.totalUpvotes}
+                    collects={post.stats.totalAmountOfCollects}
+                    mirrors={post.stats.totalAmountOfMirrors}
+                    // @ts-ignore
+                    profilePicture={post.profile.picture?.original?.url || ""}
+                    timePosted={post.createdAt}
+                  />
+                ))}
+              </InfiniteScroll>
+            )}
           </TabsContent>
 
           <TabsContent

@@ -1,11 +1,15 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ThirdwebProvider, useSDK, useSigner } from "@thirdweb-dev/react";
-import { CHAIN } from "../const/chains";
+import { CHAIN, IS_DEV_ENV } from "../const/chains";
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
-import { LensProvider, development } from "@lens-protocol/react-web";
+import {
+  LensProvider,
+  development,
+  production,
+} from "@lens-protocol/react-web";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import "../styles/globals.css";
 import { useTypedDataSignerWrapper } from "@/lib/useTypedDataSigner";
@@ -31,12 +35,10 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  console.log(signer?.provider);
-
   return (
     <LensProvider
       config={{
-        environment: development,
+        environment: IS_DEV_ENV ? development : production,
         bindings: {
           getSigner: async () => typedDataSigner,
           getProvider: async () =>
