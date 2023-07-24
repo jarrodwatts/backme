@@ -17,7 +17,7 @@ import Post from "@/components/Post";
 const Feed: NextPage = () => {
   const activeProfile = useLensHookSafely(useActiveProfile);
   const publicFeed = useLensHookSafely(useExplorePublications, {
-    limit: 10,
+    limit: 25,
     publicationTypes: [PublicationTypes.Post],
     sortCriteria: PublicationSortCriteria.TopCollected,
   });
