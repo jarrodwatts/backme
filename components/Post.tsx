@@ -12,41 +12,25 @@ import {
   Post,
   Comment,
   ReactionType,
+  CollectState,
 } from "@lens-protocol/react-web";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { useRouter } from "next/router";
+import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
-  id: string;
   post: Post | Comment;
-  profilePicture: string;
-  displayName: string;
-  handle: string;
-  timePosted: string;
-  content: string;
-  media: string;
-  comments: number;
-  mirrors: number;
-  collects: number;
-  hearts: number;
+  className?: string;
 };
 
 // Currently only handle upvote
 const reactionType = ReactionType.UPVOTE;
 
-export default function Post({
-  id,
-  post,
-  comments,
-  content,
-  media,
-  displayName,
-  handle,
-  hearts,
-  mirrors,
-  collects,
-  profilePicture,
-  timePosted,
-}: Props) {
+export default function Post({ post, className }: Props) {
+  const router = useRouter();
+  const { toast } = useToast();
   const activeProfile = useLensHookSafely(useActiveProfile);
 
   const mirror = useLensHookSafely(useCreateMirror, {
@@ -72,21 +56,22 @@ export default function Post({
     });
   }, [react, post]);
 
+  const postMedia = useMemo(() => {
+    return (
+      post?.metadata?.image || post?.metadata?.media?.[0]?.original?.url || null
+    );
+  }, [post]);
+
   async function handleReaction() {
     if (!react) return;
 
-    const hasReactionType = react.hasReaction({
-      publication: post,
-      reactionType,
-    });
-
-    if (hasReactionType) {
-      await react.removeReaction({
+    if (!hasReaction) {
+      await react.addReaction({
         publication: post,
         reactionType,
       });
     } else {
-      await react?.removeReaction({
+      await react.removeReaction({
         publication: post,
         reactionType,
       });
@@ -99,10 +84,10 @@ export default function Post({
         <DialogContent className="h-auto border w-screen p-1 max-w-6xl max-h-screen">
           {
             // Render media in big mode
-            media && (
+            postMedia && (
               <MediaRenderer
-                src={media}
-                alt={`A post by ${displayName}`}
+                src={postMedia}
+                alt={`A post by ${post.profile.name || post.profile.handle}`}
                 width="100%"
                 height="auto"
                 className="rounded-sm w-screen"
@@ -111,15 +96,29 @@ export default function Post({
           }
         </DialogContent>
 
-        <div className="flex flex-col w-full h-full border border-solid p-4 rounded-md mt-4">
-          {/* Profile picture */}
-
+        <div
+          onClick={() => {
+            router.push(`/post/${post.id}`);
+          }}
+          className={cn(
+            "flex flex-col w-full h-full border border-solid p-4 rounded-md mt-4 z-0 hover:cursor-pointer transition-all duration-250 hover:bg-muted hover:text-accent-foreground",
+            className
+          )}
+        >
           <div className="flex flex-col ml-2 w-6/8">
-            <div className="flex flex-row items-center gap-2">
-              <Link href={`/profile/${handle}`}>
+            <div className="flex flex-row items-center gap-2 z-10">
+              <Link
+                href={`/profile/${post.profile.handle}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <MediaRenderer
-                  src={profilePicture}
-                  alt={`${displayName}'s profile picture`}
+                  // @ts-ignore
+                  src={post.profile.picture?.original?.url || ""}
+                  alt={`${
+                    post.profile.name || post.profile.handle
+                  }'s profile picture`}
                   height="52px"
                   width="52px"
                   className="rounded-full"
@@ -128,63 +127,84 @@ export default function Post({
               <div className="flex flex-col items-start">
                 {/* Profile Name */}
                 <Link
-                  href={`/profile/${handle}`}
+                  href={`/profile/${post.profile.handle}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                   className="font-semibold hover:underline transition-all duration-150"
                 >
-                  {displayName}
+                  {post.profile.name || post.profile.handle}
                 </Link>
                 {/* Handle */}
                 <Link
-                  href={`/profile/${handle}`}
+                  href={`/profile/${post.profile.handle}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                   className="text-sm text-muted-foreground  hover:underline transition-all duration-150"
                 >
-                  @{handle}
+                  @{post.profile.handle}
                 </Link>
                 {/* Time ago posted */}
                 <p className="text-xs text-muted-foreground mt-1">
-                  {formatDate(timePosted)} ago
+                  {formatDate(post.createdAt)} ago
                 </p>
               </div>
             </div>
 
             {/* Post content */}
             <p className="text-start mt-2 text-ellipsis break-words">
-              {content}
+              {post?.metadata?.content || ""}
             </p>
 
-            {media && (
-              <DialogTrigger className="pr-2">
+            {postMedia && (
+              <DialogTrigger
+                className="pr-2 z-010"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <MediaRenderer
-                  src={media}
-                  alt={`A post by ${displayName}`}
+                  src={postMedia}
+                  alt={`A post by ${post.profile.name || post.profile.handle}`}
                   width="100%"
                   height="auto"
-                  className="my-2 rounded-sm "
+                  className="my-2 rounded-sm"
                 />
               </DialogTrigger>
             )}
 
             {/* Post metadata */}
-            <div className="flex flex-row items-center justify-between w-full text-muted-foreground mt-4 pr-5">
+            <div className="flex flex-row items-center justify-between w-full text-muted-foreground mt-4 pr-5 z-10">
               {/* Comments - Take user to the post */}
-              <Link
-                href={`/post/${id}`}
+              <Button
+                variant={"ghost"}
+                onClick={(e) => {
+                  router.push(`/post/${post?.id}`);
+                  e.stopPropagation();
+                }}
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150 hover:cursor-pointer"
                 tabIndex={0}
               >
                 <Icons.comment />
-                <p className="text-sm">{comments}</p>
-              </Link>
+                <p className="text-sm">{post?.stats?.commentsCount}</p>
+              </Button>
 
               {/* Mirrors */}
-              <div
+              <Button
+                variant={"ghost"}
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150"
-                role="button"
                 tabIndex={1}
-                onClick={() => {
-                  mirror?.execute({
-                    publication: post,
-                  });
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  try {
+                    mirror?.execute({
+                      publication: post,
+                    });
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}
               >
                 <Icons.mirror
@@ -201,15 +221,22 @@ export default function Post({
                       : "text-muted-foreground text-sm"
                   }
                 >
-                  {mirrors}
+                  {post?.stats?.totalAmountOfMirrors}
                 </p>
-              </div>
+              </Button>
               {/* Hearts */}
-              <div
+              <Button
+                variant={"ghost"}
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150"
-                role="button"
                 tabIndex={2}
-                onClick={() => handleReaction()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  try {
+                    handleReaction();
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
               >
                 <Icons.heart
                   fill={hasReaction ? "rgb(74 222 128)" : ""}
@@ -222,16 +249,60 @@ export default function Post({
                     hasReaction ? "text-green-400" : "text-muted-foreground"
                   } text-sm`}
                 >
-                  {hearts}
+                  {post?.stats?.totalUpvotes}
                 </p>
-              </div>
+              </Button>
 
-              <div
+              <Button
+                variant={"ghost"}
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150"
-                role="button"
                 tabIndex={2}
-                onClick={() => {
-                  collect?.execute();
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  try {
+                    switch (post.collectPolicy.state) {
+                      case CollectState.COLLECT_TIME_EXPIRED:
+                        toast({
+                          variant: "destructive",
+                          title: "Post cannot be collected!",
+                          description: `The collection time has expired for this post.`,
+                        });
+
+                      case CollectState.COLLECT_LIMIT_REACHED:
+                        toast({
+                          variant: "destructive",
+                          title: "Post cannot be collected!",
+                          description: `The collection limit has been reached for this post.`,
+                        });
+
+                      case CollectState.NOT_A_FOLLOWER:
+                        toast({
+                          variant: "destructive",
+                          title: "Post cannot be collected!",
+                          description: `You need to follow ${post.profile.name} to collect this post.`,
+                        });
+
+                      case CollectState.CANNOT_BE_COLLECTED:
+                        toast({
+                          variant: "destructive",
+                          title: "Post cannot be collected!",
+                          description: `The creator of this post has disabled collections.`,
+                        });
+
+                      case CollectState.CAN_BE_COLLECTED:
+                        try {
+                          await collect?.execute();
+                          toast({
+                            title: "Collected Post!",
+                            description: `You have collected ${post.profile.name}'s post`,
+                          });
+                        } catch (error) {
+                          console.error(error);
+                        }
+                    }
+                  } catch (error) {
+                    console.error(error);
+                  }
                 }}
               >
                 <Icons.collect
@@ -248,9 +319,9 @@ export default function Post({
                       : "text-muted-foreground text-sm"
                   }
                 >
-                  {collects}
+                  {post?.stats?.totalAmountOfCollects}
                 </p>
-              </div>
+              </Button>
             </div>
           </div>
         </div>

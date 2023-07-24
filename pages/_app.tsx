@@ -14,6 +14,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import "../styles/globals.css";
 import { useTypedDataSignerWrapper } from "@/lib/useTypedDataSigner";
 import NetworkSwitchModal from "@/components/NetworkSwitchModal";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -75,10 +76,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             domain: process.env.NEXT_PUBLIC_AUTH_DOMAIN || "evmkit.com",
             authUrl: "/api/auth",
           }}
+          thirdwebApiKey={process.env.NEXT_PUBLIC_THIRDWEB_API_KEY || ""}
         >
           <LensThirdwebProvider>
             <NetworkSwitchModal />
             <Component {...pageProps} />
+            <Toaster />
           </LensThirdwebProvider>
         </ThirdwebProvider>
       </main>

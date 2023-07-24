@@ -87,26 +87,7 @@ const Feed: NextPage = () => {
               >
                 {/* @ts-ignore: PostType idk bro */}
                 {publicFeed?.data?.map((post: PostType) => (
-                  <Post
-                    key={post.id}
-                    post={post}
-                    id={post.id}
-                    comments={post.stats.commentsCount}
-                    content={post.metadata.content || ""}
-                    media={
-                      post?.metadata?.image ||
-                      post?.metadata?.media?.[0]?.original?.url ||
-                      ""
-                    }
-                    displayName={post.profile.name || post.profile.handle}
-                    handle={post.profile.handle}
-                    hearts={post.stats.totalUpvotes}
-                    collects={post.stats.totalAmountOfCollects}
-                    mirrors={post.stats.totalAmountOfMirrors}
-                    // @ts-ignore
-                    profilePicture={post.profile.picture?.original?.url || ""}
-                    timePosted={post.createdAt}
-                  />
+                  <Post key={post.id} post={post} />
                 ))}
               </InfiniteScroll>
             )}
