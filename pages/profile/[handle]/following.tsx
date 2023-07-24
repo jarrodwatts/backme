@@ -2,30 +2,24 @@ import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
-import {
-  Post as PostType,
-  useProfile,
-  ProfileId,
-  useProfileFollowers,
-} from "@lens-protocol/react-web";
+import { useProfile, useProfileFollowing } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useToast } from "@/components/ui/use-toast";
 import { MediaRenderer } from "@thirdweb-dev/react";
 
-const ProfilePage = () => {
+const FollowingPage = () => {
   // Get the post ID from the URL
   const router = useRouter();
   const { handle } = router.query;
-
-  const { toast } = useToast();
 
   const profile = useLensHookSafely(useProfile, {
     handle: handle as string,
   });
 
-  const following = useLensHookSafely(useProfileFollowers, {
-    profileId: profile?.data?.id as ProfileId,
+  console.log(profile);
+
+  const following = useLensHookSafely(useProfileFollowing, {
+    walletAddress: profile?.data?.ownedBy as string,
   });
 
   if (profile?.error) {
@@ -83,18 +77,15 @@ const ProfilePage = () => {
               {following?.data?.map((user) => (
                 <div className="flex flex-row items-center justify-between w-full my-2">
                   <div
-                    className="flex flex-row items-center w-full p-1"
+                    className="flex flex-row items-center w-full p-1 hover:cursor-pointer"
                     onClick={() => {
-                      router.push(
-                        `/profile/${user?.wallet.defaultProfile?.handle}`
-                      );
+                      router.push(`/profile/${user?.profile?.handle}`);
                     }}
                   >
                     <MediaRenderer
                       src={
                         // @ts-ignore - this is fine, we're checking for null
-                        user?.wallet.defaultProfile?.picture?.original?.url ||
-                        ""
+                        user?.profile?.picture?.original?.url || ""
                       }
                       height="48px"
                       width="48px"
@@ -102,10 +93,10 @@ const ProfilePage = () => {
                     />
                     <div className="flex flex-col">
                       <span className="text-base font-semibold">
-                        {user?.wallet.defaultProfile?.name}
+                        {user?.profile?.name}
                       </span>
                       <span className="text-sm text-muted-foreground">
-                        @{user?.wallet.defaultProfile?.handle}
+                        @{user?.profile?.handle}
                       </span>
                     </div>
                   </div>
@@ -119,4 +110,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default FollowingPage;
