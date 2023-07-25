@@ -7,14 +7,15 @@ import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 import {
   LensProvider,
+  RequiredSigner,
   development,
   production,
 } from "@lens-protocol/react-web";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import "../styles/globals.css";
-import { useTypedDataSignerWrapper } from "@/lib/useTypedDataSigner";
 import NetworkSwitchModal from "@/components/NetworkSwitchModal";
 import { Toaster } from "@/components/ui/toaster";
+import { useTypedDataSignerWrapper } from "@/lib/typedDataSigner";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,9 +31,9 @@ const fontHeading = localFont({
 function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
   const sdk = useSDK();
   const signer = useSigner();
-  const typedDataSigner = useTypedDataSignerWrapper(signer, sdk);
+  const signerWrapped = useTypedDataSignerWrapper(signer, sdk);
 
-  if (!typedDataSigner) {
+  if (!signerWrapped) {
     return <>{children}</>;
   }
 
@@ -41,9 +42,9 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
       config={{
         environment: IS_DEV_ENV ? development : production,
         bindings: {
-          getSigner: async () => typedDataSigner,
+          getSigner: async () => signerWrapped as RequiredSigner,
           getProvider: async () =>
-            new JsonRpcProvider("mumbai.rpc.thirdweb.com"),
+            new JsonRpcProvider("https://rpc.ankr.com/polygon_mumbai"),
         },
         // @ts-ignore: TODO
         appId: "backme",

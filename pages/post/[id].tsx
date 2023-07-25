@@ -49,8 +49,6 @@ const PostPage = () => {
     upload: (data: unknown) => sdk!.storage.upload(data),
   });
 
-  console.log("Comment:", createComment);
-
   if (publication?.error) {
     return (
       <>
@@ -137,8 +135,8 @@ const PostPage = () => {
                   <>
                     {Array.from({
                       length:
-                        (publication.data as PostType | Comment).stats
-                          .totalAmountOfComments || 4,
+                        (publication.data as PostType | Comment)?.stats
+                          ?.totalAmountOfComments || 4,
                     }).map((_, i) => (
                       <Skeleton
                         className="h-[88px] animate-pulse bg-muted mt-3 w-full"

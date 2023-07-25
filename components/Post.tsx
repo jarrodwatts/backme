@@ -78,6 +78,8 @@ export default function Post({ post, className }: Props) {
     }
   }
 
+  console.log("Collect:", collect);
+
   return (
     <>
       <Dialog>
@@ -196,9 +198,8 @@ export default function Post({ post, className }: Props) {
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150"
                 tabIndex={1}
                 onClick={(e) => {
-                  e.stopPropagation();
-
                   try {
+                    e.stopPropagation();
                     mirror?.execute({
                       publication: post,
                     });
@@ -294,7 +295,9 @@ export default function Post({ post, className }: Props) {
                           await collect?.execute();
                           toast({
                             title: "Collected Post!",
-                            description: `You have collected ${post.profile.name}'s post`,
+                            description: `You have collected ${
+                              post.profile.name || post.profile.handle
+                            }'s post`,
                           });
                         } catch (error) {
                           console.error(error);

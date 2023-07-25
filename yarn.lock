@@ -763,47 +763,47 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@lens-protocol/api-bindings@0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.9.1.tgz#947b9f34173693fbd90a1bb3a15211868bae5e88"
-  integrity sha512-zVOTgLjfWKoC9A7SFzEj5IGxO0brs/XYQmbMQfFfOCchVgdyBFNvfiE2Gl1St4nipPtLcRyJlbZKpJ/y/2wOXw==
+"@lens-protocol/api-bindings@0.9.2-next.1":
+  version "0.9.2-next.1"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.9.2-next.1.tgz#cdf9cd2d6b5e0d7b2e9f7ea39c5dd9177accb93e"
+  integrity sha512-Bzwf7L7FD5uzwajPkjzlT0b+vGSpttd53hW9eHIAU8wxL84mHZiK4TFugZC2cJ+v07DFG895YHs04EVayIySlg==
   dependencies:
     "@apollo/client" "^3.7.1"
-    "@lens-protocol/domain" "0.9.0"
+    "@lens-protocol/domain" "0.9.1-next.0"
     "@lens-protocol/shared-kernel" "0.9.0"
     graphql "^16.6.0"
     graphql-tag "^2.12.6"
     tslib "^2.5.0"
 
-"@lens-protocol/blockchain-bindings@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.9.0.tgz#a85dd62666864e6e878da2a615b39e3d97605a8a"
-  integrity sha512-1eLiHRf37oJefDO6SZj5QnDw5D/n3wKiFDiG/R+i8u5x7g7LQzBMos4G6219AjkoP0QNn2bS/jLR6Mr1+X/p4Q==
+"@lens-protocol/blockchain-bindings@0.9.1-next.0":
+  version "0.9.1-next.0"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.9.1-next.0.tgz#62a9c8475c99256e549ed7a7a46dd6910508186f"
+  integrity sha512-HxYFL7vz+ZGLH5z3a44D4/XIMz6CDDPnoPyzmRO0cjsFOFYuoMZQtmbLczVUtMQ6BlwekkT2VJm1TXt9fFLs5A==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
-    "@lens-protocol/domain" "0.9.0"
+    "@lens-protocol/domain" "0.9.1-next.0"
     "@lens-protocol/shared-kernel" "0.9.0"
     ethers "^5.7.2"
     tslib "^2.5.0"
 
-"@lens-protocol/domain@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/domain/-/domain-0.9.0.tgz#de4870270a98390f5c4298cfdcea00140d5878bc"
-  integrity sha512-xVSXCI9MdSCsT/ki7tmp8t2BGyJEq/md14moT06FZO9mcpQq66snEDjQTrsSbLlUAvqOSD3/gfKGpJ8U+bIf+g==
+"@lens-protocol/domain@0.9.1-next.0":
+  version "0.9.1-next.0"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/domain/-/domain-0.9.1-next.0.tgz#18d47fb20bf00f536d793436251d915d70f9bcd4"
+  integrity sha512-bSGmOzqSqXS7bINLqWuY43lRVgfVsru5HZbe85rQdstnYDMkCvGVldmzscbJcZztSGRYuv6YaaO8nE+sBDW88w==
   dependencies:
     "@lens-protocol/shared-kernel" "0.9.0"
     tslib "^2.5.0"
 
-"@lens-protocol/gated-content@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/gated-content/-/gated-content-0.3.1.tgz#82c8b6587c390db863fa2c44dffb111fde469638"
-  integrity sha512-EWjnrmm9pXfqOmH2pTAQ0mDUxPJZOn+kcWQTxZ12+ecPWhFhTlhM86XYM/toFDTs+VgNec9+KAkyyMxsqgyyxw==
+"@lens-protocol/gated-content@0.3.2-next.1":
+  version "0.3.2-next.1"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/gated-content/-/gated-content-0.3.2-next.1.tgz#8981d90e42a328d6ddffff322358f32263e27f33"
+  integrity sha512-ZPf56ZSUq96jFUVaQKOramHk1mhW0s764VGEXjxkru6jFocYM2s3f902MVVMPN8HNK+BN+lQF0ff+LxUZoXZ4g==
   dependencies:
     "@ethersproject/address" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
-    "@lens-protocol/api-bindings" "0.9.1"
-    "@lens-protocol/domain" "0.9.0"
+    "@lens-protocol/api-bindings" "0.9.2-next.1"
+    "@lens-protocol/domain" "0.9.1-next.0"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
     "@lit-protocol/constants" "2.1.62"
@@ -814,30 +814,26 @@
     siwe "^1.1.6"
     tslib "^2.5.0"
 
-"@lens-protocol/react-web@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react-web/-/react-web-1.2.2.tgz#d1e3f315442496a48bc2fac51fa7f5d2960cff34"
-  integrity sha512-BU8tShrRVMBoIaAtHstGSPu0zu0uGfaWFk34aauJKkw+PtEH9ljsnFurECVVZaq/HoHRREj/I7ByIqrFvHCgnA==
+"@lens-protocol/react-web@file:.yalc/@lens-protocol/react-web":
+  version "1.3.0-next.2"
   dependencies:
-    "@lens-protocol/api-bindings" "0.9.1"
-    "@lens-protocol/gated-content" "0.3.1"
-    "@lens-protocol/react" "1.2.2"
+    "@lens-protocol/api-bindings" "0.9.2-next.1"
+    "@lens-protocol/gated-content" "0.3.2-next.1"
+    "@lens-protocol/react" "1.3.0-next.2"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
     tslib "^2.5.0"
 
-"@lens-protocol/react@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react/-/react-1.2.2.tgz#10b9fb82470b9f9dfbe964f132c93149317cdac3"
-  integrity sha512-sGbUrlhAjizK2HSJIbpFw68FdHbodNKku0nz1S9T9zqn7dcdXJpx/wqWun9ZGe/13jtwXqhdPtipFFaGQ8qNyw==
+"@lens-protocol/react@1.3.0-next.2", "@lens-protocol/react@file:.yalc/@lens-protocol/react":
+  version "1.3.0-next.2"
   dependencies:
     "@apollo/client" "^3.7.1"
     "@ethersproject/abstract-signer" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
-    "@lens-protocol/api-bindings" "0.9.1"
-    "@lens-protocol/blockchain-bindings" "0.9.0"
-    "@lens-protocol/domain" "0.9.0"
-    "@lens-protocol/gated-content" "0.3.1"
+    "@lens-protocol/api-bindings" "0.9.2-next.1"
+    "@lens-protocol/blockchain-bindings" "0.9.1-next.0"
+    "@lens-protocol/domain" "0.9.1-next.0"
+    "@lens-protocol/gated-content" "0.3.2-next.1"
     "@lens-protocol/shared-kernel" "0.9.0"
     "@lens-protocol/storage" "0.7.3"
     graphql "^16.6.0"
@@ -1350,7 +1346,7 @@
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-primitive" "1.0.3"
 
-"@radix-ui/react-checkbox@^1.0.3":
+"@radix-ui/react-checkbox@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-checkbox/-/react-checkbox-1.0.4.tgz#98f22c38d5010dd6df4c5744cac74087e3275f4b"
   integrity sha512-CBuGQa52aAYnADZVt/KBQzXrwx6TqnlwtcIPGtVt5JkkzQwMOLJjPukimhfKEr4GQNd43C+djUh5Ikopj8pSLg==
@@ -1473,6 +1469,14 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-use-layout-effect" "1.0.1"
+
+"@radix-ui/react-label@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-label/-/react-label-2.0.2.tgz#9c72f1d334aac996fdc27b48a8bdddd82108fb6d"
+  integrity sha512-N5ehvlM7qoTLx7nWPodsPYPgMzA5WM8zZChQg8nyFJKnDO5WHdba1vv5/H6IO5LtJMfD2Q3wh1qHFGNtK0w3bQ==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/react-primitive" "1.0.3"
 
 "@radix-ui/react-menu@2.0.5":
   version "2.0.5"

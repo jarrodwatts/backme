@@ -22,6 +22,7 @@ const FollowersPage = () => {
 
   const following = useLensHookSafely(useProfileFollowers, {
     profileId: profile?.data?.id as ProfileId,
+    limit: 25,
   });
 
   if (profile?.error) {

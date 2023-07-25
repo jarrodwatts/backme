@@ -1,6 +1,7 @@
-import { Provider } from "@ethersproject/providers";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { Signer, TypedDataDomain, TypedDataField } from "ethers";
+import { useMemo } from "react";
+import { EIP712Domain } from "../types/EIP712Domain";
 
 export interface TypedDataSigner {
   _signTypedData(
@@ -10,40 +11,35 @@ export interface TypedDataSigner {
   ): Promise<string>;
 }
 
-export class TypedDataSignerWrapper extends Signer implements TypedDataSigner {
-  sdk: ThirdwebSDK;
+function addTypedDataToSigner(
+  signer: Signer,
+  sdk: ThirdwebSDK
+): Signer & TypedDataSigner {
+  const signerWithTypedData: Signer & TypedDataSigner = Object.create(signer);
 
-  constructor(private signer: Signer, sdk: ThirdwebSDK) {
-    super();
-    this.sdk = sdk;
-  }
-
-  async getAddress(): Promise<string> {
-    return this.signer.getAddress();
-  }
-
-  async signMessage(message: string): Promise<string> {
-    return this.signer.signMessage(message);
-  }
-
-  async signTransaction(transaction: any): Promise<string> {
-    return this.signer.signTransaction(transaction);
-  }
-
-  async sendTransaction(transaction: any): Promise<any> {
-    return this.signer.sendTransaction(transaction);
-  }
-
-  connect(provider: Provider): Signer {
-    return this.signer.connect(provider);
-  }
-
-  async _signTypedData(
+  signerWithTypedData._signTypedData = async (
     domain: TypedDataDomain,
     types: Record<string, Array<TypedDataField>>,
     value: Record<string, any>
-  ): Promise<string> {
-    return (await this.sdk.wallet.signTypedData(domain as any, types, value))
-      .signature;
-  }
+  ): Promise<string> => {
+    return (
+      await sdk.wallet.signTypedData(domain as EIP712Domain, types, value)
+    ).signature;
+  };
+
+  return signerWithTypedData;
+}
+
+export function useTypedDataSignerWrapper(
+  signer: Signer | undefined,
+  sdk: ThirdwebSDK | undefined
+): (Signer & TypedDataSigner) | undefined {
+  const signerWithTypedData = useMemo(() => {
+    if (signer && sdk) {
+      return addTypedDataToSigner(signer, sdk);
+    }
+    return undefined;
+  }, [signer, sdk]);
+
+  return signerWithTypedData;
 }

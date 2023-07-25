@@ -16,10 +16,9 @@ const FollowingPage = () => {
     handle: handle as string,
   });
 
-  console.log(profile);
-
   const following = useLensHookSafely(useProfileFollowing, {
     walletAddress: profile?.data?.ownedBy as string,
+    limit: 25,
   });
 
   if (profile?.error) {
