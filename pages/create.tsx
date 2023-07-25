@@ -3,10 +3,14 @@ import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import {
+  CollectPolicyType,
+  ContentFocus,
   DecryptionCriteriaType,
   MediaObject,
+  ReferencePolicyType,
   useActiveProfile,
   useCreateEncryptedPost,
+  useCreatePost,
 } from "@lens-protocol/react-web";
 import { useSDK } from "@thirdweb-dev/react";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,9 +20,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import fileToMimeType from "@/lib/fileToMimeType";
 import fileToContentFocus from "@/lib/fileToContentFocus";
+import useUpload from "@/lib/useUpload";
 
 const Create = () => {
   const sdk = useSDK();
+  const upload = useUpload();
   const { toast } = useToast();
 
   // Form state
@@ -31,36 +37,104 @@ const Create = () => {
   const createEncrypted = useLensHookSafely(useCreateEncryptedPost, {
     // TODO: forcing sign in state rn (same with sdk beneath it too)
     publisher: activeProfile?.data!,
-    upload: (data: unknown) => sdk!.storage.upload(data),
+    upload: async (data: unknown) => upload(data),
+  });
+
+  const createUnencrypted = useLensHookSafely(useCreatePost, {
+    publisher: activeProfile?.data!,
+    upload: async (data: unknown) => upload(data),
   });
 
   async function handleCreatePost() {
-    // TODO:
-    if (!file || !sdk || !activeProfile?.data) return;
+    if (!sdk || !activeProfile?.data) return;
+
+    let result;
 
     try {
-      debugger;
-      // Upload media first
-      const mediaUrl = await sdk?.storage.upload(file);
+      if (file) {
+        console.log(file);
+        const mediaUrl = await upload(file);
 
-      const mediaAttachment: MediaObject = {
-        url: mediaUrl,
-        mimeType: fileToMimeType(file),
-      };
+        console.log("Media:", mediaUrl);
 
-      const result = await createEncrypted?.execute({
-        locale: "en-us",
-        content: content,
-        media: [mediaAttachment],
-        animationUrl: "", // wat?
-        contentFocus: fileToContentFocus(file),
-        decryptionCriteria: {
-          type: DecryptionCriteriaType.FOLLOW_PROFILE,
-          profileId: activeProfile?.data?.id,
-        },
-      });
+        const mediaAttachment: MediaObject = {
+          url: mediaUrl,
+          mimeType: fileToMimeType(file),
+        };
 
-      console.log(result);
+        // 1/4 File + Followers Only
+        if (isFollowersOnly) {
+          result = await createEncrypted?.execute({
+            locale: "en-us",
+            content: content,
+            media: [mediaAttachment],
+            animationUrl: "", // wat?
+            contentFocus: fileToContentFocus(file),
+            decryptionCriteria: {
+              type: DecryptionCriteriaType.FOLLOW_PROFILE,
+              profileId: activeProfile?.data?.id,
+            },
+            collect: {
+              type: CollectPolicyType.NO_COLLECT,
+            },
+            reference: {
+              type: ReferencePolicyType.ANYONE,
+            },
+          });
+        }
+        // 2/4 File + Public
+        else {
+          result = await createUnencrypted?.execute({
+            locale: "en-us",
+            content: content,
+            media: [mediaAttachment],
+            animationUrl: "", // wat?
+            contentFocus: fileToContentFocus(file),
+            collect: {
+              type: CollectPolicyType.NO_COLLECT,
+            },
+            reference: {
+              type: ReferencePolicyType.ANYONE,
+            },
+          });
+        }
+      } else {
+        // 3/4 No File + Followers Only
+        if (isFollowersOnly) {
+          result = await createEncrypted?.execute({
+            locale: "en-us",
+            content: content,
+            media: [],
+            contentFocus: ContentFocus.TEXT_ONLY,
+            decryptionCriteria: {
+              type: DecryptionCriteriaType.FOLLOW_PROFILE,
+              profileId: activeProfile?.data?.id,
+            },
+            collect: {
+              type: CollectPolicyType.NO_COLLECT,
+            },
+            reference: {
+              type: ReferencePolicyType.ANYONE,
+            },
+          });
+        }
+        // 4/4 No File + Public
+        else {
+          result = await createUnencrypted?.execute({
+            locale: "en-us",
+            content: content,
+            contentFocus: ContentFocus.TEXT_ONLY,
+            collect: {
+              type: CollectPolicyType.NO_COLLECT,
+            },
+            reference: {
+              type: ReferencePolicyType.ANYONE,
+            },
+          });
+        }
+      }
+
+      console.log("Result:", result);
 
       if (result?.isFailure()) {
         throw new Error(result.error.message);
@@ -70,6 +144,7 @@ const Create = () => {
         });
       }
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error creating post.",
         description:

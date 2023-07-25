@@ -52,7 +52,7 @@ const FollowersPage = () => {
         <div className="w-full md:w-[620px]">
           {/* Profile name */}
           <h1 className="text-xl font-semibold w-auto mt-4">
-            {profile?.data?.name}&rsquo;s following
+            {profile?.data?.name || profile?.data?.handle}&rsquo;s following
           </h1>
 
           {/* Handle */}

@@ -7,11 +7,11 @@ import {
   Post as PostType,
   useProfile,
   ProfileId,
-  usePublications,
   useFollow,
   useActiveProfile,
   useUnfollow,
-  PublicationMainFocus,
+  usePublications,
+  PublicationTypes,
 } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,8 +34,12 @@ const ProfilePage = () => {
 
   const publications = useLensHookSafely(usePublications, {
     profileId: profile?.data?.id as ProfileId,
-    limit: 10,
+    limit: 25,
+    publicationTypes: [PublicationTypes.Post],
+    observerId: activeProfile?.data?.id as ProfileId,
   });
+
+  console.log(publications);
 
   const follow = useLensHookSafely(useFollow, {
     // @ts-ignore - TODO: Might not be signed in

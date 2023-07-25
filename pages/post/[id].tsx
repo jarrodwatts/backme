@@ -18,15 +18,16 @@ import {
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Input } from "@/components/ui/input";
-import { MediaRenderer, useSDK, useStorageUpload } from "@thirdweb-dev/react";
+import { MediaRenderer } from "@thirdweb-dev/react";
 import { useToast } from "@/components/ui/use-toast";
+import useUpload from "@/lib/useUpload";
 
 const PostPage = () => {
   // Get the post ID from the URL
   const router = useRouter();
   const { id } = router.query;
 
-  const sdk = useSDK();
+  const upload = useUpload();
   const { toast } = useToast();
 
   const [comment, setComment] = useState<string>("");
@@ -43,11 +44,12 @@ const PostPage = () => {
   });
 
   const createComment = useLensHookSafely(useCreateComment, {
-    // @ts-ignore: TODO, publisher may not be signedi n
+    // @ts-ignore: TODO, publisher may not be signed in
     publisher: activeProfile?.data,
-    // TODO: SDK may be defined, we are forcing !
-    upload: (data: unknown) => sdk!.storage.upload(data),
+    upload: (data: unknown) => upload(data),
   });
+
+  console.log(createComment);
 
   if (publication?.error) {
     return (
@@ -99,15 +101,20 @@ const PostPage = () => {
           />
           <Button
             className="ml-3"
-            onClick={() => {
+            onClick={async () => {
               try {
                 if (!publication?.data) return;
 
-                createComment?.execute({
+                await createComment?.execute({
                   contentFocus: ContentFocus.TEXT_ONLY,
                   publicationId: publication.data.id,
                   locale: "en",
                   content: comment,
+                });
+
+                setComment("");
+                toast({
+                  title: "Comment created.",
                 });
               } catch (error) {
                 toast({

@@ -197,14 +197,25 @@ export default function Post({ post, className }: Props) {
                 variant={"ghost"}
                 className="flex flex-row items-center gap-2 hover:text-foreground transition-all duration-150"
                 tabIndex={1}
-                onClick={(e) => {
+                onClick={async (e) => {
                   try {
                     e.stopPropagation();
-                    mirror?.execute({
+                    await mirror?.execute({
                       publication: post,
+                    });
+                    toast({
+                      title: "Post mirrored",
+                      description: `Successfully mirrored ${
+                        post.profile.name || post.profile.handle
+                      }'s post.`,
                     });
                   } catch (error) {
                     console.error(error);
+                    toast({
+                      variant: "destructive",
+                      title: "Failed to mirror post",
+                      description: `This user has disabled mirroring for this post.`,
+                    });
                   }
                 }}
               >
