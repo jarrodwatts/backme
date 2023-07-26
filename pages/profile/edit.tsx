@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
-import { MediaRenderer } from "@thirdweb-dev/react";
 import { useToast } from "@/components/ui/use-toast";
+import ProfileForm from "@/components/ProfileForm";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -41,43 +42,12 @@ const ProfilePage = () => {
       <Nav />
       <div className="w-full container flex max-w-[64rem] flex-col items-center gap-4 h-screen">
         <div className="w-full md:w-[620px]">
-          {/* Cover photo */}
-          <MediaRenderer
-            alt={`${activeProfile?.data?.handle}'s cover photo`}
-            // @ts-ignore, image is there
-            src={activeProfile?.data?.coverPicture?.original?.url || ""}
-            width="100%"
-            height="200px"
-            style={{
-              objectFit: "cover",
-            }}
-          />
-
-          {/* Profile picture */}
-          <MediaRenderer
-            alt={`${activeProfile?.data?.handle}'s profile picture`}
-            // @ts-ignore, image is there
-            src={activeProfile?.data?.picture?.original?.url || ""}
-            width="128px"
-            height="128px"
-            style={{
-              objectFit: "cover",
-            }}
-            className="rounded-full border-4 shadow-sm -mt-16 ml-4"
-          />
-
-          {/* Profile name */}
-          <h1 className="text-xl font-semibold w-auto mt-4">
-            {activeProfile?.data?.name}
-          </h1>
-
-          {/* Handle */}
-          <p className="text-sm text-muted-foreground">
-            @{activeProfile?.data?.handle}
-          </p>
-
-          {/* Bio */}
-          <p className="leading-7 mt-1">{activeProfile?.data?.bio}</p>
+          {activeProfile?.loading ? (
+            <Skeleton className="h-96" />
+          ) : (
+            activeProfile &&
+            activeProfile.data && <ProfileForm profile={activeProfile?.data} />
+          )}
         </div>
       </div>
     </>
