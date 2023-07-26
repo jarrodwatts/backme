@@ -56,7 +56,7 @@ const Home: NextPage = () => {
           <p className="max-w-[820px] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
             Subscribe to your favorite creators using cryptocurrency, and
             receive an NFT that grants you access to their exclusive content.
-            Come back at any time to view the content you've unlocked.
+            Come back at any time to view the content you&rsquo;ve unlocked.
           </p>
           <div className="relative w-full py-8">
             <div className="radial-gradient absolute blur-3xl rounded-full opacity-10 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 z-0 h-64 w-full md:top-32" />

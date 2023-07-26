@@ -30,7 +30,7 @@ const FollowingPage = () => {
             Profile not found
           </h1>
           <p className="leading-7">
-            Sorry, that profile doesn't exist, or it has been deleted.
+            Sorry, that profile doesn&rsquo;t exist, or it has been deleted.
           </p>
 
           <Button className="mt-2" onClick={() => router.push("/feed")}>
@@ -73,8 +73,11 @@ const FollowingPage = () => {
                 </>
               }
             >
-              {following?.data?.map((user) => (
-                <div className="flex flex-row items-center justify-between w-full my-2">
+              {following?.data?.map((user, key) => (
+                <div
+                  className="flex flex-row items-center justify-between w-full my-2"
+                  key={key}
+                >
                   <div
                     className="flex flex-row items-center w-full p-1 hover:cursor-pointer"
                     onClick={() => {

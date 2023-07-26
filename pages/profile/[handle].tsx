@@ -102,7 +102,7 @@ const ProfilePage = () => {
             Profile not found
           </h1>
           <p className="leading-7">
-            Sorry, that profile doesn't exist, or it has been deleted.
+            Sorry, that profile doesn&rsquo;t exist, or it has been deleted.
           </p>
 
           <Button className="mt-2" onClick={() => router.push("/feed")}>

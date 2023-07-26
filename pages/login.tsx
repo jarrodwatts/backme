@@ -90,7 +90,7 @@ const Login: NextPage = () => {
           {walletInfo?.data && !activeProfile?.data && (
             <div className="flex flex-col w-full justify-start items-center space-y-4">
               <p className="text-red-500 text-lg font-semibold">
-                You don't have a Lens profile yet. 😞
+                You don&rsquo;t have a Lens profile yet. 😞
               </p>
               <p className="text-md text-muted-foreground pb-4">
                 Backme requires you to have a Lens profile NFT.{" "}
