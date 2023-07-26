@@ -7,6 +7,8 @@ import {
   useExplorePublications,
   Post as PostType,
   PublicationSortCriteria,
+  useFeed,
+  FeedEventItemType,
 } from "@lens-protocol/react-web";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
@@ -16,10 +18,27 @@ import Post from "@/components/Post";
 
 const Feed: NextPage = () => {
   const activeProfile = useLensHookSafely(useActiveProfile);
+
   const publicFeed = useLensHookSafely(useExplorePublications, {
     limit: 25,
     publicationTypes: [PublicationTypes.Post],
     sortCriteria: PublicationSortCriteria.TopCollected,
+  });
+
+  const personalizedFeed = useLensHookSafely(useFeed, {
+    // @ts-ignore: TODO, non-signed in state
+    profileId: activeProfile?.data?.id,
+    limit: 25,
+    restrictEventTypesTo: [FeedEventItemType.Post],
+  });
+
+  console.log(personalizedFeed);
+
+  const backmeExclusiveFeed = useLensHookSafely(useFeed, {
+    // @ts-ignore: TODO, non-signed in state
+    profileId: activeProfile?.data?.id,
+    restrictEventTypesTo: [FeedEventItemType.Post],
+    limit: 25,
   });
 
   return (
@@ -37,16 +56,16 @@ const Feed: NextPage = () => {
               </span>
             </TabsTrigger>
             <TabsTrigger
-              value="public"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-            >
-              Public Feed
-            </TabsTrigger>
-            <TabsTrigger
               value="feed"
               className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
             >
               Your Feed
+            </TabsTrigger>
+            <TabsTrigger
+              value="public"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+            >
+              Popular Posts
             </TabsTrigger>
           </TabsList>
 
@@ -97,40 +116,48 @@ const Feed: NextPage = () => {
             className="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-full mt-8"
             value="feed"
           >
-            {
-              // Loading active profile
-              activeProfile?.loading &&
-                Array.from({ length: 10 }).map((_, i) => (
-                  <Skeleton
-                    className="h-[88px] animate-pulse bg-muted mt-3 w-full"
-                    key={i}
-                  />
-                ))
-            }
+            {/* Public feed loading */}
+            {personalizedFeed?.loading &&
+              Array.from({ length: 10 }).map((_, i) => (
+                <Skeleton
+                  className="h-[88px] animate-pulse bg-muted mt-3 w-full"
+                  key={i}
+                />
+              ))}
 
-            {/* Feed content goes here */}
+            {/* Public feed has loaded */}
+            {!personalizedFeed?.loading && personalizedFeed?.data && (
+              <InfiniteScroll
+                dataLength={personalizedFeed?.data?.length || 0}
+                next={() => personalizedFeed?.next()}
+                hasMore={personalizedFeed?.hasMore}
+                loader={
+                  <>
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <Skeleton
+                        className="h-[88px] animate-pulse bg-muted mt-3 w-full"
+                        key={i}
+                      />
+                    ))}
+                  </>
+                }
+                endMessage={
+                  <p className="text-muted-foreground text-sm my-4">
+                    You&rsquo;ve seen it all!
+                  </p>
+                }
+              >
+                {personalizedFeed?.data?.map((post) => (
+                  <Post key={post.root.id} post={post.root} />
+                ))}
+              </InfiniteScroll>
+            )}
           </TabsContent>
 
           <TabsContent
             className="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mt-8"
             value="backme"
-          >
-            {/* Exclusive content goes here */}
-            {
-              // Loading active profile
-              activeProfile?.loading &&
-                Array.from({ length: 10 }).map((_, i) => (
-                  <Skeleton
-                    className="h-[88px] animate-pulse bg-muted mt-3 w-full"
-                    key={i}
-                  />
-                ))
-            }
-
-            {activeProfile?.data && (
-              <FeedContainer profileId={activeProfile?.data?.id} />
-            )}
-          </TabsContent>
+          ></TabsContent>
         </Tabs>
       </section>
     </>

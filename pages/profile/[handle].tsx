@@ -56,7 +56,12 @@ const ProfilePage = () => {
   });
 
   async function handleFollow() {
-    if (!profile) return;
+    if (!profile?.data) return;
+
+    if (profile?.data.ownedByMe) {
+      router.push("/profile/edit");
+      return;
+    }
 
     if (
       !profile.data?.followStatus?.canFollow &&
@@ -133,7 +138,11 @@ const ProfilePage = () => {
           {/* Follow button has position beneath cover image and parallel to the profile picture */}
           <div className="relative flex justify-end h-0">
             <Button className="mt-4 mr-4" onClick={handleFollow}>
-              {profile?.data?.isFollowedByMe ? "Unfollow" : "Follow"}
+              {profile?.data?.ownedByMe
+                ? "Edit Profile"
+                : profile?.data?.isFollowedByMe
+                ? "Unfollow"
+                : "Follow"}
             </Button>
           </div>
 

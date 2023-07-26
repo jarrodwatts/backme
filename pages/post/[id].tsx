@@ -51,7 +51,7 @@ const PostPage = () => {
     upload: (data: unknown) => upload(data),
   });
 
-  console.log(comments);
+  console.log(comment);
 
   if (publication?.error) {
     return (

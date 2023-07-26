@@ -104,7 +104,6 @@ const Create = () => {
           result = await createEncrypted?.execute({
             locale: "en-us",
             content: content,
-            media: [],
             contentFocus: ContentFocus.TEXT_ONLY,
             decryptionCriteria: {
               type: DecryptionCriteriaType.FOLLOW_PROFILE,
