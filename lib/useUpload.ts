@@ -18,13 +18,10 @@ export default function useUpload() {
 
     const [cid, path] = ipfsHash.replace("ipfs://", "").split("/");
 
-    const publicUrl = sdk!.storage
-      .getGatewayUrls()
-      ["ipfs://"][4].replace("{cid}", cid)
-      .replace("{path}", path);
+    const publicUrl = `https://gateway.ipfscdn.io/ipfs/${cid}/${path}`;
 
     // Need to fetch so that the data is ready when we finish this function
-    console.log("Fetching...");
+    console.log("Fetching...", publicUrl);
     await fetch(publicUrl);
     console.log("Fetched, returning publicUrl", publicUrl);
 

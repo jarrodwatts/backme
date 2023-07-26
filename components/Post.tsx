@@ -303,7 +303,12 @@ export default function Post({ post, className }: Props) {
 
                       case CollectState.CAN_BE_COLLECTED:
                         try {
-                          await collect?.execute();
+                          const result = await collect?.execute();
+
+                          if (result?.isFailure()) {
+                            throw new Error(result.error.message);
+                          }
+
                           toast({
                             title: "Collected Post!",
                             description: `You have collected ${
@@ -312,6 +317,12 @@ export default function Post({ post, className }: Props) {
                           });
                         } catch (error) {
                           console.error(error);
+                          // TODO: Handle "InsufficientFundsError"
+                          toast({
+                            variant: "destructive",
+                            title: "Post cannot be collected!",
+                            description: `Something went wrong collecting this post. Please try again later.`,
+                          });
                         }
                     }
                   } catch (error) {

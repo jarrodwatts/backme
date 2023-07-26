@@ -14,6 +14,8 @@ import {
   useActiveProfile,
   useCreateComment,
   ContentFocus,
+  ReferencePolicyType,
+  CollectPolicyType,
 } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -49,7 +51,7 @@ const PostPage = () => {
     upload: (data: unknown) => upload(data),
   });
 
-  console.log(createComment);
+  console.log(comments);
 
   if (publication?.error) {
     return (
@@ -105,12 +107,22 @@ const PostPage = () => {
               try {
                 if (!publication?.data) return;
 
-                await createComment?.execute({
+                const result = await createComment?.execute({
                   contentFocus: ContentFocus.TEXT_ONLY,
                   publicationId: publication.data.id,
                   locale: "en",
                   content: comment,
+                  collect: {
+                    type: CollectPolicyType.NO_COLLECT,
+                  },
+                  reference: {
+                    type: ReferencePolicyType.ANYONE,
+                  },
                 });
+
+                if (result?.isFailure()) {
+                  throw new Error("Failed to create comment");
+                }
 
                 setComment("");
                 toast({
