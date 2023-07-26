@@ -28,6 +28,8 @@ const ProfilePage = () => {
 
   const activeProfile = useLensHookSafely(useActiveProfile);
 
+  console.log(activeProfile);
+
   const profile = useLensHookSafely(useProfile, {
     handle: handle as string,
   });
@@ -127,7 +129,7 @@ const ProfilePage = () => {
           <MediaRenderer
             alt={`${profile?.data?.handle}'s cover photo`}
             // @ts-ignore, image is there
-            src={profile?.data?.coverPicture?.original?.url || ""}
+            src={profile?.data?.coverPicture?.original?.url || "/cover.jpg"}
             width="100%"
             height="200px"
             style={{
@@ -150,7 +152,7 @@ const ProfilePage = () => {
           <MediaRenderer
             alt={`${profile?.data?.handle}'s profile picture`}
             // @ts-ignore, image is there
-            src={profile?.data?.picture?.original?.url || ""}
+            src={profile?.data?.picture?.original?.url || "/user.png"}
             width="128px"
             height="128px"
             style={{

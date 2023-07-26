@@ -87,7 +87,9 @@ const FollowingPage = () => {
                     <MediaRenderer
                       src={
                         // @ts-ignore - this is fine, we're checking for null
-                        user?.profile?.picture?.original?.url || ""
+                        user?.profile?.picture?.original?.url ||
+                        "/user.png" ||
+                        ""
                       }
                       height="48px"
                       width="48px"

@@ -38,10 +38,12 @@ export default function ProfileForm({ profile }: Props) {
   console.log(profile);
   const router = useRouter();
   const upload = useUpload();
+
   const updateProfile = useLensHookSafely(useUpdateProfileDetails, {
     profile: profile,
     upload: upload,
   });
+
   const updateProfileImage = useLensHookSafely(useUpdateProfileImage, {
     profile: profile,
   });
@@ -180,12 +182,6 @@ export default function ProfileForm({ profile }: Props) {
           )}
         />
         <div className="flex flex-row items-center justify-between">
-          <Button
-            variant="outline"
-            onClick={() => router.push(`/profile/${profile.handle}`)}
-          >
-            Cancel
-          </Button>
           <Button type="submit">Submit</Button>
         </div>
       </form>

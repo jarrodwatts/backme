@@ -32,15 +32,14 @@ export function Nav() {
               </button>
               <Link href={`/profile/${activeProfile?.data?.handle}`}>
                 <MediaRenderer
-                  // @ts-ignore, image is there
-                  src={activeProfile?.data?.picture?.original?.url || ""}
+                  src={
+                    // @ts-ignore, image is there
+                    activeProfile?.data?.picture?.original?.url || "/user.png"
+                  }
                   width={"32px"}
                   height={"32px"}
                   className="rounded-full"
                 />
-                <span className="text-sm font-medium text-white">
-                  {activeProfile?.data?.name}
-                </span>
               </Link>
             </div>
           ) : (

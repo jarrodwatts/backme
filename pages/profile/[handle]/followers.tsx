@@ -94,6 +94,7 @@ const FollowersPage = () => {
                       src={
                         // @ts-ignore - this is fine, we're checking for null
                         user?.wallet.defaultProfile?.picture?.original?.url ||
+                        "/user.png" ||
                         ""
                       }
                       height="48px"

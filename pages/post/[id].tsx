@@ -87,9 +87,13 @@ const PostPage = () => {
 
         <div className="flex flex-row items-center border border-solid p-4 w-full rounded-md">
           <MediaRenderer
-            // @ts-ignore
-            src={activeProfile?.data?.picture?.original?.url || ""}
-            alt={`${activeProfile?.data?.name || ""}'s profile picture`}
+            src={
+              // @ts-ignore
+              activeProfile?.data?.picture?.original?.url || "/user.png" || ""
+            }
+            alt={`${
+              activeProfile?.data?.name || activeProfile?.data?.handle || ""
+            }'s profile picture`}
             height="40px"
             width="40px"
             className="rounded-full mr-4"

@@ -117,7 +117,7 @@ export default function Post({ post, className }: Props) {
               >
                 <MediaRenderer
                   // @ts-ignore
-                  src={post.profile.picture?.original?.url || ""}
+                  src={post.profile.picture?.original?.url || "/user.png"}
                   alt={`${
                     post.profile.name || post.profile.handle
                   }'s profile picture`}

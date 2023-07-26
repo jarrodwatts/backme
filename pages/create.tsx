@@ -21,8 +21,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import fileToMimeType from "@/lib/fileToMimeType";
 import fileToContentFocus from "@/lib/fileToContentFocus";
 import useUpload from "@/lib/useUpload";
+import { useRouter } from "next/router";
 
 const Create = () => {
+  const router = useRouter();
   const sdk = useSDK();
   const upload = useUpload();
   const { toast } = useToast();
@@ -141,6 +143,8 @@ const Create = () => {
         toast({
           title: "Post created!",
         });
+
+        router.push(`/profile/${activeProfile.data.handle}`);
       }
     } catch (error) {
       console.error(error);

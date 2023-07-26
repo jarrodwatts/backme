@@ -14,8 +14,6 @@ const ProfilePage = () => {
 
   const activeProfile = useLensHookSafely(useActiveProfile);
 
-  async function handleFollow() {}
-
   if (activeProfile?.error) {
     return (
       <>

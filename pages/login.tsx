@@ -68,8 +68,10 @@ const Login: NextPage = () => {
 
               <div className="flex flex-row outline outline-2 outline-[rgba(255,255,255,.1)] rounded-md p-4 w-full gap-4 items-center">
                 <MediaRenderer
-                  // @ts-ignore
-                  src={activeProfile?.data?.picture?.original?.url}
+                  src={
+                    // @ts-ignore
+                    activeProfile?.data?.picture?.original?.url || "/user.png"
+                  }
                   width="128px"
                   height="128px"
                   className="rounded-full h-24 w-24"
