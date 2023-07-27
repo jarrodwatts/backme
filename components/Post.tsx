@@ -260,9 +260,11 @@ export default function Post({ post, className }: Props) {
                 />
               </div>
             ) : (
-              <p className="text-start mt-2 text-ellipsis break-words">
-                {postToUse.metadata.content}
-              </p>
+              !encryptedPublication?.isPending && (
+                <p className="text-start mt-2 text-ellipsis break-words">
+                  {postToUse.metadata.content}
+                </p>
+              )
             )}
 
             {postMedia && (
