@@ -35,7 +35,6 @@ type Props = {
 };
 
 export default function ProfileForm({ profile }: Props) {
-  console.log(profile);
   const router = useRouter();
   const upload = useUpload();
 
@@ -82,8 +81,6 @@ export default function ProfileForm({ profile }: Props) {
       if (profilePicture) {
         await updateProfileImage?.execute(profilePicture);
       }
-
-      console.log(updateProfileResult);
 
       if (updateProfileResult?.isFailure()) {
         throw new Error(updateProfileResult.error.message);

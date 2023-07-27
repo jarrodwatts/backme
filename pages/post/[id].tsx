@@ -51,7 +51,19 @@ const PostPage = () => {
     upload: (data: unknown) => upload(data),
   });
 
-  console.log(comment);
+  console.log(publication);
+
+  if (publication?.loading) {
+    return (
+      <>
+        <Nav />
+        <section className="w-full container flex max-w-[720px] flex-col items-center gap-4 text-center h-screen">
+          <Skeleton className="h-[120px] animate-pulse bg-muted mt-3 w-full" />
+          <Skeleton className="h-[64px] animate-pulse bg-muted mt-3 w-full" />
+        </section>
+      </>
+    );
+  }
 
   if (publication?.error) {
     return (

@@ -32,8 +32,6 @@ const Feed: NextPage = () => {
     restrictEventTypesTo: [FeedEventItemType.Post],
   });
 
-  console.log(personalizedFeed);
-
   const backmeExclusiveFeed = useLensHookSafely(useFeed, {
     // @ts-ignore: TODO, non-signed in state
     profileId: activeProfile?.data?.id,

@@ -28,8 +28,6 @@ const ProfilePage = () => {
 
   const activeProfile = useLensHookSafely(useActiveProfile);
 
-  console.log(activeProfile);
-
   const profile = useLensHookSafely(useProfile, {
     handle: handle as string,
   });
@@ -40,8 +38,6 @@ const ProfilePage = () => {
     publicationTypes: [PublicationTypes.Post],
     observerId: activeProfile?.data?.id as ProfileId,
   });
-
-  console.log(publications);
 
   const follow = useLensHookSafely(useFollow, {
     // @ts-ignore - TODO: Might not be signed in

@@ -27,6 +27,7 @@ import {
   Repeat2,
   X,
   GalleryVerticalEnd,
+  KeyRound,
 } from "lucide-react";
 
 export const Icons = {
@@ -55,6 +56,7 @@ export const Icons = {
   comment: MessageCircle,
   mirror: Repeat2,
   collect: GalleryVerticalEnd,
+  gated: KeyRound,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

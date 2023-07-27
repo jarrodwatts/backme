@@ -54,10 +54,7 @@ const Create = () => {
 
     try {
       if (file) {
-        console.log(file);
         const mediaUrl = await upload(file);
-
-        console.log("Media:", mediaUrl);
 
         const mediaAttachment: MediaObject = {
           url: mediaUrl,
@@ -134,8 +131,6 @@ const Create = () => {
           });
         }
       }
-
-      console.log("Result:", result);
 
       if (result?.isFailure()) {
         throw new Error(result.error.message);

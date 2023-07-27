@@ -21,9 +21,7 @@ export default function useUpload() {
     const publicUrl = `https://gateway.ipfscdn.io/ipfs/${cid}/${path}`;
 
     // Need to fetch so that the data is ready when we finish this function
-    console.log("Fetching...", publicUrl);
     await fetch(publicUrl);
-    console.log("Fetched, returning publicUrl", publicUrl);
 
     return publicUrl;
   };
