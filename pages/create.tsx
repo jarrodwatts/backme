@@ -137,6 +137,7 @@ const Create = () => {
       } else {
         toast({
           title: "Post created!",
+          description: "Allow a few seconds for your post to appear.",
         });
 
         router.push(`/profile/${activeProfile.data.handle}`);

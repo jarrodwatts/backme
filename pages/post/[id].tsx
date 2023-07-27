@@ -51,8 +51,6 @@ const PostPage = () => {
     upload: (data: unknown) => upload(data),
   });
 
-  console.log(publication);
-
   if (publication?.loading) {
     return (
       <>

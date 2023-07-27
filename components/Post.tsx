@@ -68,21 +68,15 @@ export default function Post({ post, className }: Props) {
   const postToUse = useMemo(() => {
     if (hasDecrypted) {
       if (!encryptedPublication?.data) {
-        console.log(
-          "Returning normal post, because no encrypted publicaiton data."
-        );
         return post;
       }
 
       if (encryptedPublication.isPending) {
-        console.log("Returning normal post, because decryption is pending.");
         return post;
       }
 
-      console.log("Returning decrypted post.");
       return encryptedPublication?.data;
     } else {
-      console.log("Returning normal post, because not decrypted.");
       return post;
     }
   }, [hasDecrypted, encryptedPublication, post]);
@@ -107,7 +101,6 @@ export default function Post({ post, className }: Props) {
     if (hasDecrypted) return;
 
     if (post.isGated && post.canObserverDecrypt.result) {
-      console.log("Decrypting...");
       void encryptedPublication?.decrypt();
     }
   }, [post, hasDecrypted, encryptedPublication]);
@@ -122,7 +115,6 @@ export default function Post({ post, className }: Props) {
       post.isGated &&
       post.canObserverDecrypt.result
     ) {
-      console.log("Setting Decrypted to true.");
       setHasDecrypted(true);
     }
   }, [
@@ -253,7 +245,7 @@ export default function Post({ post, className }: Props) {
               <Skeleton className="w-full h-20 mt-2" />
             )}
 
-            {post.isGated && post.canObserverDecrypt.result === false && (
+            {post.isGated && post.canObserverDecrypt.result === false ? (
               <div className="flex flex-col w-full mt-2 gap-3">
                 <p className="text-start mt-2 text-ellipsis break-words">
                   {`This is a followers only exclusive. Follow ${
@@ -267,6 +259,10 @@ export default function Post({ post, className }: Props) {
                   width={512}
                 />
               </div>
+            ) : (
+              <p className="text-start mt-2 text-ellipsis break-words">
+                {postToUse.metadata.content}
+              </p>
             )}
 
             {postMedia && (

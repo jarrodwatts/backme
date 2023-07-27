@@ -62,6 +62,7 @@ const Home: NextPage = () => {
             <div className="radial-gradient absolute blur-3xl rounded-full opacity-10 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 z-0 h-64 w-full md:top-32" />
             <Image
               src="/Fans.png"
+              priority
               width={1607}
               height={557}
               alt="how it works - backme"
