@@ -16,6 +16,7 @@ import "../styles/globals.css";
 import NetworkSwitchModal from "@/components/NetworkSwitchModal";
 import { Toaster } from "@/components/ui/toaster";
 import { useTypedDataSignerWrapper } from "@/lib/typedDataSigner";
+import { useRouter } from "next/router";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -31,9 +32,10 @@ const fontHeading = localFont({
 function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
   const sdk = useSDK();
   const signer = useSigner();
+  const router = useRouter();
   const signerWrapped = useTypedDataSignerWrapper(signer, sdk);
 
-  if (!signer) {
+  if (!signer && router.pathname !== "/" && router.pathname !== "/login") {
     return (
       <>
         <NetworkSwitchModal />
