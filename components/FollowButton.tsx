@@ -2,6 +2,7 @@ import {
   FollowPolicyType,
   Profile,
   ProfileOwnedByMe,
+  useApproveModule,
   useFollow,
   useUnfollow,
 } from "@lens-protocol/react-web";
@@ -9,6 +10,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useToast } from "./ui/use-toast";
 import { Button } from "./ui/button";
+import { useSDK } from "@thirdweb-dev/react";
 
 type Props = {
   followee: Profile;
@@ -17,14 +19,14 @@ type Props = {
 
 export default function FollowButton({ followee, follower }: Props) {
   const router = useRouter();
+  const sdk = useSDK();
   const { toast } = useToast();
+  const approveModule = useApproveModule();
 
   const follow = useFollow({
     followee,
     follower,
   });
-
-  console.log(follow);
 
   const unfollow = useUnfollow({
     followee,
@@ -36,8 +38,6 @@ export default function FollowButton({ followee, follower }: Props) {
       router.push("/profile/edit");
       return;
     }
-
-    console.log(followee?.followStatus);
 
     if (!followee.followStatus?.canFollow && !followee.isFollowedByMe) {
       toast({
@@ -56,6 +56,29 @@ export default function FollowButton({ followee, follower }: Props) {
           title: `Unfollowed ${followee?.name || followee?.handle}`,
         });
       } else {
+        // If charge, approve funds first
+        if (followee.followPolicy.type === FollowPolicyType.CHARGE) {
+          // const approveFundsResult = await approveModule.execute({
+          //   amount: followee.followPolicy.amount,
+          //   limit: TokenAllowanceLimit.INFINITE,
+          //   spender: followee.followPolicy.contractAddress,
+          // });
+
+          // console.log("Approval:", approveModule);
+
+          // Get WMATIC
+          const contract = await sdk?.getContract(
+            "0x9c3c9283d3e44854697cd22d3faa240cfb032889"
+          );
+
+          const approveFundsResult = await contract?.erc20.setAllowance(
+            followee.followPolicy.contractAddress,
+            followee.followPolicy.amount.toNumber()
+          );
+
+          console.log("Approval:", approveFundsResult);
+        }
+
         const result = await follow?.execute();
 
         console.log(result);

@@ -131,7 +131,11 @@ export default function ProfileForm({ profile }: Props) {
       }
 
       // 3. Follower policy
-      if (newFollowerPolicy !== profile.followPolicy.type) {
+      if (
+        newFollowerPolicy !== profile.followPolicy.type ||
+        (newFollowerPolicy === FollowPolicyType.CHARGE &&
+          data.followPolicy?.price)
+      ) {
         const erc20 = currencies?.data?.find((c) => c.symbol === "WMATIC")!;
         const amount = data.followPolicy?.price || "0";
         const fee = Amount.erc20(erc20, amount);
@@ -311,6 +315,8 @@ export default function ProfileForm({ profile }: Props) {
                 <Input
                   {...field}
                   type="number"
+                  // allow 4 decimals
+                  step="0.0001"
                   defaultValue={
                     profile.followPolicy.type === FollowPolicyType.CHARGE
                       ? profile.followPolicy.amount.toNumber()
