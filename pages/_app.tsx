@@ -45,8 +45,8 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
           getSigner: async () => signerWrapped as RequiredSigner,
           getProvider: async () =>
             IS_DEV_ENV
-              ? new JsonRpcProvider("mumbai.rpc.thirdweb.com")
-              : new JsonRpcProvider("polygon.rpc.thirdweb.com"),
+              ? new JsonRpcProvider("https://mumbai.rpc.thirdweb.com")
+              : new JsonRpcProvider("https://mumbai.rpc.thirdweb.com"),
         },
         // @ts-ignore: TODO
         appId: "backme",

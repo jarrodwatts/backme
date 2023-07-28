@@ -20,13 +20,12 @@ export default function NetworkSwitchModal() {
   const address = useAddress();
   const wrongNetwork = useNetworkMismatch();
   const [openNetworkModal, setOpenNetworkModal] = useState<boolean>(false);
-  const [switchAttempted, setSwitchAttempted] = useState<boolean>(false);
   const walletInfo = useLensHookSafely(useActiveWallet);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
-    if ((!address || wrongNetwork || !walletInfo?.data) && !switchAttempted) {
+    if (!address || wrongNetwork || !walletInfo?.data) {
       if (router.pathname !== "/" && router.pathname !== "/login") {
         timeoutId = setTimeout(() => {
           setOpenNetworkModal(true);
@@ -39,13 +38,7 @@ export default function NetworkSwitchModal() {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [
-    address,
-    wrongNetwork,
-    switchAttempted,
-    router.pathname,
-    walletInfo?.data,
-  ]);
+  }, [address, wrongNetwork, router.pathname, walletInfo?.data]);
 
   return (
     <Dialog open={openNetworkModal}>

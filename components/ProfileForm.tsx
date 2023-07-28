@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,20 +15,38 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { Input } from "./ui/input";
 import {
+  FollowPolicyType,
   ProfileOwnedByMe,
   useUpdateProfileDetails,
   useUpdateProfileImage,
+  useUpdateFollowPolicy,
+  matic,
+  Amount,
+  ChainType,
+  Kind,
+  useCurrencies,
 } from "@lens-protocol/react-web";
 import useUpload from "@/lib/useUpload";
 import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { Separator } from "./ui/separator";
+import { Checkbox } from "./ui/checkbox";
+import Link from "next/link";
 
 const FormSchema = z.object({
   name: z.string().min(3).max(20).optional(),
   bio: z.string().max(1000).optional(),
   profilePicture: z.any().optional(),
   coverPicture: z.any().optional(),
+  followPolicy: z
+    .object({
+      type: z
+        .enum([FollowPolicyType.ANYONE, FollowPolicyType.CHARGE])
+        .optional(),
+      price: z.string().optional(),
+    })
+    .optional(),
 });
 
 type Props = {
@@ -38,12 +57,19 @@ export default function ProfileForm({ profile }: Props) {
   const router = useRouter();
   const upload = useUpload();
 
+  const currencies = useLensHookSafely(useCurrencies);
+  console.log(currencies?.data);
+
   const updateProfile = useLensHookSafely(useUpdateProfileDetails, {
     profile: profile,
     upload: upload,
   });
 
   const updateProfileImage = useLensHookSafely(useUpdateProfileImage, {
+    profile: profile,
+  });
+
+  const updateFollowerPolicy = useLensHookSafely(useUpdateFollowPolicy, {
     profile: profile,
   });
 
@@ -58,7 +84,14 @@ export default function ProfileForm({ profile }: Props) {
   const [profilePictureNew, setProfilePicture] = useState<File | undefined>();
   const [coverPictureNew, setCoverPicture] = useState<File | undefined>();
 
+  const [newFollowerPolicy, setNewFollowerPolicy] = useState<FollowPolicyType>(
+    profile.followPolicy.type
+  );
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log(data);
+    console.log(newFollowerPolicy);
+
     try {
       let profilePicture: string | undefined;
       let coverPicture: string | undefined;
@@ -71,19 +104,58 @@ export default function ProfileForm({ profile }: Props) {
         profilePicture = await upload(profilePictureNew);
       }
 
-      const updateProfileResult = await updateProfile?.execute({
-        name: data.name || profile.name || "",
-        bio: data.bio || profile.bio || "",
-        // @ts-ignore
-        coverPicture: coverPicture || profile.coverPicture.original.url || "",
-      });
+      // If any profile data got updated...
+      if (
+        coverPicture ||
+        data.name !== profile.name ||
+        data.bio !== profile.bio
+      ) {
+        // 1. Profile info
+        const updateProfileResult = await updateProfile?.execute({
+          name: data.name || profile.name || "",
+          bio: data.bio || profile.bio || "",
+          // @ts-ignore
+          coverPicture: coverPicture || profile.coverPicture.original.url || "",
+        });
 
-      if (profilePicture) {
-        await updateProfileImage?.execute(profilePicture);
+        if (updateProfileResult?.isFailure()) {
+          throw new Error(updateProfileResult.error.message);
+        }
       }
 
-      if (updateProfileResult?.isFailure()) {
-        throw new Error(updateProfileResult.error.message);
+      // 2. Profile picture
+      if (profilePicture) {
+        const updateImageResult = await updateProfileImage?.execute(
+          profilePicture
+        );
+
+        if (updateImageResult?.isFailure()) {
+          throw new Error(updateImageResult.error.message);
+        }
+      }
+
+      // 3. Follower policy
+      if (newFollowerPolicy !== profile.followPolicy.type) {
+        const erc20 = currencies?.data?.find((c) => c.symbol === "WMATIC")!;
+        const amount = data.followPolicy?.price || "0";
+        const fee = Amount.erc20(erc20, amount);
+
+        const followerUpdateResult = await updateFollowerPolicy?.execute({
+          followPolicy:
+            newFollowerPolicy === FollowPolicyType.CHARGE
+              ? {
+                  type: FollowPolicyType.CHARGE,
+                  amount: fee,
+                  recipient: profile.ownedBy,
+                }
+              : {
+                  type: FollowPolicyType.ANYONE,
+                },
+        });
+
+        if (followerUpdateResult?.isFailure()) {
+          throw new Error(followerUpdateResult.error.message);
+        }
       }
 
       toast({
@@ -103,6 +175,10 @@ export default function ProfileForm({ profile }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+          Profile Information
+        </h3>
+
         <FormField
           control={form.control}
           name="name"
@@ -178,6 +254,81 @@ export default function ProfileForm({ profile }: Props) {
             </FormItem>
           )}
         />
+
+        <Separator />
+
+        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+          Subscription Settings
+        </h3>
+
+        <FormField
+          control={form.control}
+          name="followPolicy.type"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center space-x-2">
+              <FormControl>
+                <Checkbox
+                  {...field}
+                  checked={newFollowerPolicy === FollowPolicyType.CHARGE}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      field.value = FollowPolicyType.CHARGE;
+                      setNewFollowerPolicy(FollowPolicyType.CHARGE);
+                    } else {
+                      field.value = FollowPolicyType.ANYONE;
+                      setNewFollowerPolicy(FollowPolicyType.ANYONE);
+                    }
+                  }}
+                />
+              </FormControl>
+              <FormLabel
+                style={{
+                  margin: 0,
+                  marginLeft: 12,
+                }}
+              >
+                Enable paid subscriptions
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="followPolicy.price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Follow Price</FormLabel>
+              <FormDescription>
+                This is the price that followers pay to follow you. It uses{" "}
+                <Link
+                  href="https://polygonscan.com/token/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
+                  target="_blank"
+                  className="underline font-semibold"
+                >
+                  Wrapped MATIC ($MATIC)
+                </Link>
+                .
+              </FormDescription>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  defaultValue={
+                    profile.followPolicy.type === FollowPolicyType.CHARGE
+                      ? profile.followPolicy.amount.toNumber()
+                      : 0
+                  }
+                  disabled={newFollowerPolicy === FollowPolicyType.ANYONE}
+                  placeholder="0.00"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="flex flex-row items-center justify-between">
           <Button type="submit">Submit</Button>
         </div>

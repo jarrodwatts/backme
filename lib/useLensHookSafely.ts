@@ -1,5 +1,3 @@
-import { useSigner } from "@thirdweb-dev/react";
-
 type HookWithArgs<T, U> = (args: U) => T;
 
 /**
@@ -13,16 +11,15 @@ export function useLensHookSafely<T, U>(
   hook: HookWithArgs<T, U>,
   args?: U
 ): T | null {
-  const signer = useSigner();
-
-  if (!signer) {
-    return null;
-  }
-
   try {
+    if (hook.name === "useFollow") {
+      console.log("useFollow", args);
+      debugger;
+    }
+
     return hook(args ?? ({} as U));
   } catch (e) {
-    console.error(e);
+    debugger;
     return null;
   }
 }

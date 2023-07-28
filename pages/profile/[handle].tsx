@@ -12,6 +12,7 @@ import {
   useUnfollow,
   usePublications,
   PublicationTypes,
+  FollowPolicyType,
 } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -46,6 +47,8 @@ const ProfilePage = () => {
     follower: activeProfile?.data,
   });
 
+  console.log(follow);
+
   const unfollow = useLensHookSafely(useUnfollow, {
     // @ts-ignore - TODO: Might not be signed in
     followee: profile?.data,
@@ -61,6 +64,8 @@ const ProfilePage = () => {
       return;
     }
 
+    console.log(profile.data?.followStatus);
+
     if (
       !profile.data?.followStatus?.canFollow &&
       !profile.data?.isFollowedByMe
@@ -75,13 +80,17 @@ const ProfilePage = () => {
     }
 
     try {
-      if (profile.data?.isFollowedByMe) {
+      if (
+        profile.data?.isFollowedByMe &&
+        profile.data.followStatus?.canUnfollow
+      ) {
         await unfollow?.execute();
         toast({
           title: `Unfollowed ${profile.data?.name || profile.data?.handle}`,
         });
       } else {
-        await follow?.execute();
+        const result = await follow?.execute();
+
         toast({
           title: `Followed ${profile.data?.name || profile.data?.handle}`,
         });
@@ -135,13 +144,28 @@ const ProfilePage = () => {
 
           {/* Follow button has position beneath cover image and parallel to the profile picture */}
           <div className="relative flex justify-end h-0">
-            <Button className="mt-4 mr-4" onClick={handleFollow}>
-              {profile?.data?.ownedByMe
-                ? "Edit Profile"
-                : profile?.data?.isFollowedByMe
-                ? "Unfollow"
-                : "Follow"}
-            </Button>
+            <div className="flex flex-col items-center justify-center absolute top-0 right-0 gap-2">
+              <Button className="mt-4" onClick={handleFollow}>
+                {profile?.data?.ownedByMe
+                  ? "Edit Profile"
+                  : profile?.data?.isFollowedByMe
+                  ? "Unfollow"
+                  : "Follow"}
+              </Button>
+
+              {!profile?.data?.ownedByMe &&
+                (profile?.data?.followPolicy.type ===
+                FollowPolicyType.CHARGE ? (
+                  <p className="text-sm text-muted-foreground">
+                    {profile.data.followPolicy.amount.toNumber().toString()} $
+                    {profile.data.followPolicy.amount.asset.symbol} to follow
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Free to follow!
+                  </p>
+                ))}
+            </div>
           </div>
 
           {/* Profile picture */}
