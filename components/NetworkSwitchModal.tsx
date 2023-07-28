@@ -25,7 +25,7 @@ export default function NetworkSwitchModal() {
     let timeoutId: NodeJS.Timeout;
 
     if (!address || wrongNetwork || !walletInfo?.data) {
-      if (router.pathname !== "/" && router.pathname !== "/login") {
+      if (router.pathname !== "/") {
         timeoutId = setTimeout(() => {
           setOpenNetworkModal(true);
         }, MODAL_DISPLAY_DELAY);
