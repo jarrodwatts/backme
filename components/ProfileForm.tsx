@@ -20,14 +20,10 @@ import {
   useUpdateProfileDetails,
   useUpdateProfileImage,
   useUpdateFollowPolicy,
-  matic,
   Amount,
-  ChainType,
-  Kind,
   useCurrencies,
 } from "@lens-protocol/react-web";
 import useUpload from "@/lib/useUpload";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
@@ -57,19 +53,19 @@ export default function ProfileForm({ profile }: Props) {
   const router = useRouter();
   const upload = useUpload();
 
-  const currencies = useLensHookSafely(useCurrencies);
+  const currencies = useCurrencies();
   console.log(currencies?.data);
 
-  const updateProfile = useLensHookSafely(useUpdateProfileDetails, {
+  const updateProfile = useUpdateProfileDetails({
     profile: profile,
     upload: upload,
   });
 
-  const updateProfileImage = useLensHookSafely(useUpdateProfileImage, {
+  const updateProfileImage = useUpdateProfileImage({
     profile: profile,
   });
 
-  const updateFollowerPolicy = useLensHookSafely(useUpdateFollowPolicy, {
+  const updateFollowerPolicy = useUpdateFollowPolicy({
     profile: profile,
   });
 

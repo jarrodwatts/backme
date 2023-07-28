@@ -1,4 +1,3 @@
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import Image from "next/image";
@@ -7,7 +6,7 @@ import { useRouter } from "next/router";
 
 export function Nav() {
   const router = useRouter();
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
   return (
     <>

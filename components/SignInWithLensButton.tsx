@@ -1,4 +1,4 @@
-import { useActiveWallet, useWalletLogin } from "@lens-protocol/react-web";
+import { useActiveWallet } from "@lens-protocol/react-web";
 import {
   ConnectWallet,
   useAddress,
@@ -7,17 +7,14 @@ import {
 } from "@thirdweb-dev/react";
 import React from "react";
 import { Button } from "./ui/button";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { CHAIN } from "../const/chains";
+import LoginExecuteButton from "./LoginExecuteButton";
 
 export default function SignInWithLensButton() {
   const address = useAddress();
   const wrongNetwork = useNetworkMismatch();
   const switchChain = useSwitchChain();
-  const walletInfo = useLensHookSafely(useActiveWallet);
-  const loginFunction = useLensHookSafely(useWalletLogin);
-
-  console.log(walletInfo);
+  const walletInfo = useActiveWallet();
 
   if (!address) {
     return (
@@ -46,17 +43,7 @@ export default function SignInWithLensButton() {
   }
 
   if (!walletInfo?.data) {
-    return (
-      <Button
-        onClick={() => {
-          loginFunction?.execute?.({
-            address,
-          });
-        }}
-      >
-        Sign in with Lens
-      </Button>
-    );
+    return <LoginExecuteButton />;
   }
 
   return (

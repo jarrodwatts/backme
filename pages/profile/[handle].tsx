@@ -2,7 +2,6 @@ import { Nav } from "@/components/Navbar";
 import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import {
   Post as PostType,
   useProfile,
@@ -19,6 +18,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import FollowButton from "@/components/FollowButton";
 
 const ProfilePage = () => {
   // Get the post ID from the URL
@@ -27,82 +27,18 @@ const ProfilePage = () => {
 
   const { toast } = useToast();
 
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
-  const profile = useLensHookSafely(useProfile, {
+  const profile = useProfile({
     handle: handle as string,
   });
 
-  const publications = useLensHookSafely(usePublications, {
+  const publications = usePublications({
     profileId: profile?.data?.id as ProfileId,
     limit: 25,
     publicationTypes: [PublicationTypes.Post],
     observerId: activeProfile?.data?.id as ProfileId,
   });
-
-  const follow = useLensHookSafely(useFollow, {
-    // @ts-ignore - TODO: Might not be signed in
-    followee: profile?.data,
-    // @ts-ignore - TODO: user may not exist.
-    follower: activeProfile?.data,
-  });
-
-  console.log(follow);
-
-  const unfollow = useLensHookSafely(useUnfollow, {
-    // @ts-ignore - TODO: Might not be signed in
-    followee: profile?.data,
-    // @ts-ignore - TODO: user may not exist.
-    follower: activeProfile?.data,
-  });
-
-  async function handleFollow() {
-    if (!profile?.data) return;
-
-    if (profile?.data.ownedByMe) {
-      router.push("/profile/edit");
-      return;
-    }
-
-    console.log(profile.data?.followStatus);
-
-    if (
-      !profile.data?.followStatus?.canFollow &&
-      !profile.data?.isFollowedByMe
-    ) {
-      toast({
-        title: `You can't follow this profile.`,
-        description:
-          "You may have already followed this profile, or it may be private.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      if (
-        profile.data?.isFollowedByMe &&
-        profile.data.followStatus?.canUnfollow
-      ) {
-        await unfollow?.execute();
-        toast({
-          title: `Unfollowed ${profile.data?.name || profile.data?.handle}`,
-        });
-      } else {
-        const result = await follow?.execute();
-
-        toast({
-          title: `Followed ${profile.data?.name || profile.data?.handle}`,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: `Something went wrong. Please try again later.`,
-        variant: "destructive",
-      });
-    }
-  }
 
   if (profile?.error) {
     return (
@@ -144,28 +80,12 @@ const ProfilePage = () => {
 
           {/* Follow button has position beneath cover image and parallel to the profile picture */}
           <div className="relative flex justify-end h-0">
-            <div className="flex flex-col items-center justify-center absolute top-0 right-0 gap-2">
-              <Button className="mt-4" onClick={handleFollow}>
-                {profile?.data?.ownedByMe
-                  ? "Edit Profile"
-                  : profile?.data?.isFollowedByMe
-                  ? "Unfollow"
-                  : "Follow"}
-              </Button>
-
-              {!profile?.data?.ownedByMe &&
-                (profile?.data?.followPolicy.type ===
-                FollowPolicyType.CHARGE ? (
-                  <p className="text-sm text-muted-foreground">
-                    {profile.data.followPolicy.amount.toNumber().toString()} $
-                    {profile.data.followPolicy.amount.asset.symbol} to follow
-                  </p>
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Free to follow!
-                  </p>
-                ))}
-            </div>
+            {profile.data && activeProfile.data && (
+              <FollowButton
+                followee={profile.data}
+                follower={activeProfile.data}
+              />
+            )}
           </div>
 
           {/* Profile picture */}
@@ -245,10 +165,16 @@ const ProfilePage = () => {
                 </>
               }
             >
-              {/* @ts-ignore: PostType idk bro */}
-              {publications?.data?.map((post: PostType) => (
-                <Post key={post.id} post={post} />
-              ))}
+              {activeProfile &&
+                activeProfile.data &&
+                // @ts-ignore post type
+                publications?.data?.map((post: PostType) => (
+                  <Post
+                    key={post.id}
+                    post={post}
+                    activeProfile={activeProfile.data!}
+                  />
+                ))}
             </InfiniteScroll>
           )}
         </div>

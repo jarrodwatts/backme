@@ -1,7 +1,6 @@
 import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useProfile, useProfileFollowing } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -12,11 +11,11 @@ const FollowingPage = () => {
   const router = useRouter();
   const { handle } = router.query;
 
-  const profile = useLensHookSafely(useProfile, {
+  const profile = useProfile({
     handle: handle as string,
   });
 
-  const following = useLensHookSafely(useProfileFollowing, {
+  const following = useProfileFollowing({
     walletAddress: profile?.data?.ownedBy as string,
     limit: 25,
   });

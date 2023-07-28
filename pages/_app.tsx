@@ -33,8 +33,12 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
   const signer = useSigner();
   const signerWrapped = useTypedDataSignerWrapper(signer, sdk);
 
-  if (!signerWrapped) {
-    return <>{children}</>;
+  if (!signer) {
+    return (
+      <>
+        <NetworkSwitchModal />
+      </>
+    );
   }
 
   return (

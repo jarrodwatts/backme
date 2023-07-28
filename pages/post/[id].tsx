@@ -3,7 +3,6 @@ import { Nav } from "@/components/Navbar";
 import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { cn } from "@/lib/utils";
 import {
   Post as PostType,
@@ -34,18 +33,18 @@ const PostPage = () => {
 
   const [comment, setComment] = useState<string>("");
 
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
-  const publication = useLensHookSafely(usePublication, {
+  const publication = usePublication({
     publicationId: id as PublicationId,
   });
 
-  const comments = useLensHookSafely(useComments, {
+  const comments = useComments({
     // @ts-ignore: TODO, it could be not found.
     commentsOf: publication?.data?.id,
   });
 
-  const createComment = useLensHookSafely(useCreateComment, {
+  const createComment = useCreateComment({
     // @ts-ignore: TODO, publisher may not be signed in
     publisher: activeProfile?.data,
     upload: (data: unknown) => upload(data),
@@ -88,10 +87,11 @@ const PostPage = () => {
     <>
       <Nav />
       <section className="w-full container flex max-w-[720px] flex-col items-center gap-4 text-center h-screen">
-        {!!publication?.data && (
+        {!!publication?.data && activeProfile.data && (
           <Post
             post={publication?.data as PostType | Comment}
             className={cn("h-auto")}
+            activeProfile={activeProfile?.data}
           />
         )}
 
@@ -179,9 +179,15 @@ const PostPage = () => {
                   </>
                 }
               >
-                {comments?.data?.map((post: PostType | Comment) => (
-                  <Post key={post.id} post={post} />
-                ))}
+                {activeProfile.data &&
+                  activeProfile.data !== null &&
+                  comments?.data?.map((post: PostType | Comment) => (
+                    <Post
+                      key={post.id}
+                      post={post}
+                      activeProfile={activeProfile?.data!}
+                    />
+                  ))}
               </InfiniteScroll>
             </>
           )}

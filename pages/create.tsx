@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import {
   CollectPolicyType,
   ContentFocus,
@@ -34,15 +33,15 @@ const Create = () => {
   const [content, setContent] = useState<string>("");
   const [isFollowersOnly, setIsFollowersOnly] = useState<boolean>(false);
 
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
-  const createEncrypted = useLensHookSafely(useCreateEncryptedPost, {
+  const createEncrypted = useCreateEncryptedPost({
     // TODO: forcing sign in state rn (same with sdk beneath it too)
     publisher: activeProfile?.data!,
     upload: async (data: unknown) => upload(data),
   });
 
-  const createUnencrypted = useLensHookSafely(useCreatePost, {
+  const createUnencrypted = useCreatePost({
     publisher: activeProfile?.data!,
     upload: async (data: unknown) => upload(data),
   });

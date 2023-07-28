@@ -14,8 +14,10 @@ import {
   ReactionType,
   CollectState,
   useEncryptedPublication,
+  ProfileOwnedByMe,
+  UnspecifiedError,
+  ReadResult,
 } from "@lens-protocol/react-web";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useRouter } from "next/router";
@@ -31,36 +33,33 @@ import Image from "next/image";
 
 type Props = {
   post: Post | Comment;
+  activeProfile: ProfileOwnedByMe;
   className?: string;
 };
 
 // Currently only handle upvote
 const reactionType = ReactionType.UPVOTE;
 
-export default function Post({ post, className }: Props) {
+export default function Post({ post, className, activeProfile }: Props) {
   const router = useRouter();
   const { toast } = useToast();
-  const activeProfile = useLensHookSafely(useActiveProfile);
 
-  const mirror = useLensHookSafely(useCreateMirror, {
-    // @ts-ignore TODO: Publisher may not exist, handle this case
-    publisher: activeProfile?.data,
+  const mirror = useCreateMirror({
+    publisher: activeProfile,
   });
 
-  const collect = useLensHookSafely(useCollect, {
-    // @ts-ignore TODO: Collector may not exist, handle this case
-    collector: activeProfile?.data,
+  const collect = useCollect({
+    collector: activeProfile,
     publication: post,
   });
 
-  const react = useLensHookSafely(useReaction, {
-    // @ts-ignore TODO: Profile may not exist, handle this case
-    profileId: activeProfile?.data?.id,
+  const react = useReaction({
+    profileId: activeProfile.id,
   });
 
   const [hasDecrypted, setHasDecrypted] = useState<boolean>(false);
 
-  const encryptedPublication = useLensHookSafely(useEncryptedPublication, {
+  const encryptedPublication = useEncryptedPublication({
     publication: post,
   });
 

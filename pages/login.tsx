@@ -10,7 +10,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import SignInWithLensButton from "@/components/SignInWithLensButton";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useActiveProfile, useActiveWallet } from "@lens-protocol/react-web";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { Button } from "@/components/ui/button";
@@ -18,8 +17,8 @@ import { useRouter } from "next/router";
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const walletInfo = useLensHookSafely(useActiveWallet);
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const walletInfo = useActiveWallet();
+  const activeProfile = useActiveProfile();
 
   return (
     <>

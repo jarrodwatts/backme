@@ -1,18 +1,14 @@
 import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useActiveProfile } from "@lens-protocol/react-web";
 import { useRouter } from "next/router";
-import { useToast } from "@/components/ui/use-toast";
 import ProfileForm from "@/components/ProfileForm";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const ProfilePage = () => {
   const router = useRouter();
-  const { handle } = router.query;
-  const { toast } = useToast();
 
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
   if (activeProfile?.error) {
     return (

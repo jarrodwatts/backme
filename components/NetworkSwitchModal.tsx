@@ -10,7 +10,6 @@ import { useNetworkMismatch, useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import SignInWithLensButton from "./SignInWithLensButton";
 import { Badge } from "./ui/badge";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { useActiveWallet } from "@lens-protocol/react-web";
 
 const MODAL_DISPLAY_DELAY = 1000; // Set the delay time in milliseconds
@@ -20,7 +19,7 @@ export default function NetworkSwitchModal() {
   const address = useAddress();
   const wrongNetwork = useNetworkMismatch();
   const [openNetworkModal, setOpenNetworkModal] = useState<boolean>(false);
-  const walletInfo = useLensHookSafely(useActiveWallet);
+  const walletInfo = useActiveWallet();
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;

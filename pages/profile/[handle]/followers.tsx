@@ -1,7 +1,6 @@
 import { Nav } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import {
   useProfile,
   ProfileId,
@@ -16,11 +15,11 @@ const FollowersPage = () => {
   const router = useRouter();
   const { handle } = router.query;
 
-  const profile = useLensHookSafely(useProfile, {
+  const profile = useProfile({
     handle: handle as string,
   });
 
-  const following = useLensHookSafely(useProfileFollowers, {
+  const following = useProfileFollowers({
     profileId: profile?.data?.id as ProfileId,
     limit: 25,
   });

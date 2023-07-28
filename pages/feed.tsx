@@ -11,21 +11,19 @@ import {
   FeedEventItemType,
 } from "@lens-protocol/react-web";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useLensHookSafely } from "@/lib/useLensHookSafely";
 import { Skeleton } from "../components/ui/skeleton";
-import FeedContainer from "@/components/feed/FeedContainer";
 import Post from "@/components/Post";
 
 const Feed: NextPage = () => {
-  const activeProfile = useLensHookSafely(useActiveProfile);
+  const activeProfile = useActiveProfile();
 
-  const publicFeed = useLensHookSafely(useExplorePublications, {
+  const publicFeed = useExplorePublications({
     limit: 25,
     publicationTypes: [PublicationTypes.Post],
     sortCriteria: PublicationSortCriteria.TopCollected,
   });
 
-  const personalizedFeed = useLensHookSafely(useFeed, {
+  const personalizedFeed = useFeed({
     // @ts-ignore: TODO, non-signed in state
     profileId: activeProfile?.data?.id,
     limit: 25,
@@ -57,7 +55,8 @@ const Feed: NextPage = () => {
             className="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 mt-8"
           >
             {/* Public feed loading */}
-            {publicFeed?.loading &&
+            {activeProfile &&
+              publicFeed?.loading &&
               Array.from({ length: 10 }).map((_, i) => (
                 <Skeleton
                   className="h-[88px] animate-pulse bg-muted mt-3 w-full"
@@ -66,7 +65,7 @@ const Feed: NextPage = () => {
               ))}
 
             {/* Public feed has loaded */}
-            {!publicFeed?.loading && publicFeed?.data && (
+            {activeProfile && !publicFeed?.loading && publicFeed?.data && (
               <InfiniteScroll
                 dataLength={publicFeed?.data?.length || 0}
                 next={() => publicFeed?.next()}
@@ -87,10 +86,16 @@ const Feed: NextPage = () => {
                   </p>
                 }
               >
-                {/* @ts-ignore: PostType idk bro */}
-                {publicFeed?.data?.map((post: PostType) => (
-                  <Post key={post.id} post={post} />
-                ))}
+                {activeProfile.data &&
+                  activeProfile.data !== null &&
+                  // @ts-ignore post type
+                  publicFeed?.data?.map((post: PostType) => (
+                    <Post
+                      key={post.id}
+                      post={post}
+                      activeProfile={activeProfile.data!}
+                    />
+                  ))}
               </InfiniteScroll>
             )}
           </TabsContent>
@@ -130,9 +135,14 @@ const Feed: NextPage = () => {
                   </p>
                 }
               >
-                {personalizedFeed?.data?.map((post) => (
-                  <Post key={post.root.id} post={post.root} />
-                ))}
+                {activeProfile.data &&
+                  personalizedFeed?.data?.map((post) => (
+                    <Post
+                      key={post.root.id}
+                      post={post.root}
+                      activeProfile={activeProfile.data!}
+                    />
+                  ))}
               </InfiniteScroll>
             )}
           </TabsContent>
