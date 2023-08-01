@@ -46,7 +46,7 @@ function LensThirdwebProvider({ children }: { children: React.ReactNode }) {
   return (
     <LensProvider
       config={{
-        environment: IS_DEV_ENV ? development : production,
+        environment: IS_DEV_ENV ? development : development,
         bindings: {
           getSigner: async () => signerWrapped as RequiredSigner,
           getProvider: async () =>
